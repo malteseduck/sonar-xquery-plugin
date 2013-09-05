@@ -18,7 +18,7 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
 @Rule(
     key = "XpathTextSteps",
     name = "Avoid Using text() in XPath",
-    description = "Generally avoid using /text() in your XPath in favor of using fn:string() or allowing atomization (through strong typing or default atomization). For more information see http://labslcl0274.qalab.ldschurch.org:8403/viewArticle.xqy?id=424",
+    description = "Generally avoid using /text() in your XPath in favor of using fn:string() or allowing atomization (through strong typing or default atomization).",
     priority = Priority.MINOR
 )
 public class XPathTextStepsCheck extends AbstractPathCheck {

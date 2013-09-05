@@ -15,7 +15,7 @@ import org.sonar.check.Rule;
 @Rule(
         key = "LogCheck",
         name = "Log Function Usage",
-        description = "Favor using xdmp:trace() instead of xdmp:log() For more information see http://labslcl0274.qalab.ldschurch.org:8403/viewArticle.xqy?id=424",
+        description = "Favor using xdmp:trace() instead of xdmp:log()",
         priority = Priority.MINOR)
 public class LogCheck extends AbstractProhibitFunctionCheck {
 	    

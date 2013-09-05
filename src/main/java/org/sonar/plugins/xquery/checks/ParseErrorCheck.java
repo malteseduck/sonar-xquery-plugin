@@ -13,7 +13,7 @@ import org.sonar.plugins.xquery.parser.reporter.ProblemReporter;
 @Rule(
     key = "ParseError",
     name = "Code Parsing Error",
-    description = "This is to catch parsing errors on projects.  There may be a potential syntax error, or the parser just may not be able to process certain syntax.  Technically this rule does not take part in the AST parsing. For more information see http://labslcl0274.qalab.ldschurch.org:8403/viewArticle.xqy?id=424",
+    description = "This is to catch parsing errors on projects.  There may be a potential syntax error, or the parser just may not be able to process certain syntax.",
     priority = Priority.INFO
 )
 public class ParseErrorCheck extends AbstractCheck {

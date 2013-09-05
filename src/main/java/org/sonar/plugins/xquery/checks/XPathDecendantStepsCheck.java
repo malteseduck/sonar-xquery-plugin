@@ -18,7 +18,7 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
 @Rule(
 		key = "XpathDecendantSteps",
 		name = "Avoid Using '//' in XPath",
-		description = "Favor fully-qualified paths in XPath for readability and to avoid potential performance problems. For more information see http://labslcl0274.qalab.ldschurch.org:8403/viewArticle.xqy?id=424",		
+		description = "Favor fully-qualified paths in XPath for readability and to avoid potential performance problems.",
 		priority = Priority.MINOR)
 public class XPathDecendantStepsCheck extends AbstractPathCheck {
 

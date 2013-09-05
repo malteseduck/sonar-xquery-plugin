@@ -17,7 +17,7 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
 @Rule(
         key = "OrderByRange",
         name = "Range Evaluation in Order By Clause",
-        description = "Order bys or gt/lt checks on large numbers of documents might get better performance with a range index. For more information see http://labslcl0274.qalab.ldschurch.org:8403/viewArticle.xqy?id=424",
+        description = "Order bys or gt/lt checks on large numbers of documents might get better performance with a range index.",
         priority = Priority.INFO)
 public class OrderByRangeCheck extends AbstractCheck {
 

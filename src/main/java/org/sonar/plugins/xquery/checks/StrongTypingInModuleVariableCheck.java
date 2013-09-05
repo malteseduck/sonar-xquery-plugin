@@ -17,7 +17,7 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
 @Rule(
     key = "StrongTypingInModuleVariables",
     name = "Use Strong Typing when Declaring Module Variable",
-    description = "Declare types for declared variables to increase readability and catch potential bugs.  Also try to scope the types as narrowly as possible (i.e. use 'element()' instead of 'item()' when the value is an element) and include quantifiers on each type. For more information see http://labslcl0274.qalab.ldschurch.org:8403/viewArticle.xqy?id=424",
+    description = "Declare types for declared variables to increase readability and catch potential bugs.  Also try to scope the types as narrowly as possible (i.e. use 'element()' instead of 'item()' when the value is an element) and include quantifiers on each type.",
     priority = Priority.CRITICAL
 )
 public class StrongTypingInModuleVariableCheck extends AbstractCheck {

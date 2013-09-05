@@ -18,7 +18,7 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
 @Rule(
     key = "OperationsInPredicate",
     name = "Avoid Operations in Predicates",
-    description = "Instead of calling functions or performing operations in predicates try to assigning the results in a variable before the predicate. For more information see http://labslcl0274.qalab.ldschurch.org:8403/viewArticle.xqy?id=424",
+    description = "Instead of calling functions or performing operations in predicates try to assigning the results in a variable before the predicate.",
     priority = Priority.MAJOR
 )
 public class OperationsInPredicateCheck extends AbstractPredicateCheck {
