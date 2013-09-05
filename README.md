@@ -1,15 +1,18 @@
 Sonar XQuery Plugin
 ===================
 
-Language plugin for the Sonar code analysis tool
-(http://www.sonarqube.org/).  This has been tested on Sonar 3.5.
+Language plugin for the Sonar code analysis tool (http://www.sonarqube.org/).  This has been
+tested on Sonar 3.5.
 
-Currently the grammar is generated using ANTLR v3 and supports XQuery following
+Currently the XQuery parser is generated using ANTLR v3 and supports XQuery following
 the 1.0 specification.  There are some MarkLogic-specific additions to
-support some of what the MarkLogic XQuery parser allows.  One of the TODO
-items is to upgrade support for some of the XQuery 3.0 syntax introduced
-in MarkLogic 6.0 as well as simplify the grammar management(maybe use the IntelliJ
-GrammarKit plugin).  Code parsing checks are marked as "INFO" so parser failures
+support some of what the MarkLogic XQuery parser allows.
+
+One of the "to do" items is to upgrade support for some of the XQuery 3.0 syntax
+introduced in MarkLogic 6.0 as well as simplify the grammar management(maybe use
+the IntelliJ GrammarKit plugin).
+
+Code parsing checks are marked as "INFO" so parser failures
 on 3.0 syntax should not be to disruptive.
 
 Usage
@@ -22,7 +25,8 @@ the following:
 
 The simplest approach to run the analysis on a project is to use the runner (see
 http://docs.codehaus.org/display/SONAR/Analyzing+with+SonarQube+Runner).  Here is an example
-set of properties I used to analyize the xray library (86.2% compliance - good work Rob :)):
+sonar-project.properties file I used for analyzing the xray library (86.2% compliance - good
+work Rob :)):
 
 <pre>
 # required metadata
@@ -93,8 +97,8 @@ application or significantly increase readability and/or maintainability.
     </dd>
     <dt>StrongTypingInModuleVariables</dt>
     <dd>
-        (Use Strong Typing when Declaring Module)
-        Variables Declare types for declared variables to increase readability and catch
+        (Use Strong Typing when Declaring Module Variables)
+        Declare types for declared variables to increase readability and catch
         potential bugs.  Also try to scope the types as narrowly as possible (i.e. use
         'element()' instead of 'item()' when the value is an element) and include
         quantifiers on each type.
