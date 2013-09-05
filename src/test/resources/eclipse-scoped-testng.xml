@@ -1,0 +1,20 @@
+<!--
+  ~ © 2013 by Intellectual Reserve, Inc. All rights reserved.
+  -->
+
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<!--
+    By running all tests we are assuming you have a local XDBC server
+    set up to match the test Spring configuration
+-->
+<suite name="Sonar MarkLogic Plugin Tests" verbose="2">
+    <listeners>
+        <listener class-name="mockit.integration.testng.Initializer"/>
+    </listeners>    
+    <test name="Unit Tests">
+        <classes>
+            <class name="org.sonar.plugins.xquery.parser.XQueryParserTest"/>
+        </classes>
+    </test>
+</suite>

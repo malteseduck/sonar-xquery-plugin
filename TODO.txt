@@ -1,0 +1,17 @@
+Sonar XQuery Plugin TODO List
+
+- Update XQuery parser to 3.0 (use IntelliJ GrammarKit?)
+
+- Code check modularization (allow additional checks through JAR files, etc.)
+
+- Add additional code security and convention checks
+
+- Localization checks
+
+- Add dependency metrics for Sonar
+
+- More unit tests / unit tests for Sonar functionality?
+
+- Add maven plugin to execute analysis on command line
+
+- Upgrade to follow SonarQube conventions and work with Sonar 3.7
