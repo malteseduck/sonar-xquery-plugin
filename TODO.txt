@@ -6,12 +6,12 @@ Sonar XQuery Plugin TODO List
 
 - Add additional code security and convention checks
 
-- Localization checks
+- Localization checks (hard-coded text detection, proper date/time usage?)
 
 - Add dependency metrics for Sonar
 
 - More unit tests / unit tests for Sonar functionality?
 
-- Add maven plugin to execute analysis on command line
+- Add maven plugin(?) to output results on command line
 
 - Upgrade to follow SonarQube conventions and work with Sonar 3.7
