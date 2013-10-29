@@ -80,28 +80,22 @@ releasing an application.  Following these can help prevent major problems in an
 application or significantly increase readability and/or maintainability.
 
 <dl>
-    <dt>DynamicFunctionUserScripts</dt>
-    <dd>
-        (Dynamic Function Usage with User-supplied Script)
-        Avoid passing user-supplied text into xdmp:eval() and xdmp:value().  Instead use
-        xdmp:invoke() or xdmp:unpath() or make sure all inputs passed into this function
-        are properly validated to avoid input injection.
-    </dd>
     <dt>StrongTypingInFunctionDeclaration</dt>
     <dd>
         (Use Strong Typing in Function Declarations)
-        Declare types for function parameters and return type to increase readability
-        and catch potential bugs.  Also try to scope the types as narrowly as possible
-        (i.e. use 'element()' instead of 'item()' when returning an element) and include
-        quantifiers on each type.
+        Declare types for function parameters and return types
+        to increase readability and catch potential bugs.
+        Also try to scope the types as narrowly as possible
+        (i.e. use 'element()' instead of 'item()' when returning an element)
+        and include quantifiers on each type.
     </dd>
     <dt>StrongTypingInModuleVariables</dt>
     <dd>
         (Use Strong Typing when Declaring Module Variables)
-        Declare types for declared variables to increase readability and catch
-        potential bugs.  Also try to scope the types as narrowly as possible (i.e. use
-        'element()' instead of 'item()' when the value is an element) and include
-        quantifiers on each type.
+        Declare types for declared variables to increase readability and catch potential bugs.
+        Also try to scope the types as narrowly as possible
+        (i.e. use 'element()' instead of 'item()' when the value is an element)
+        and include quantifiers on each type.
     </dd>
 </dl>
 
@@ -116,15 +110,17 @@ future problems.
 <dl>
     <dt>DynamicFunction</dt>
     <dd>
-        (Dynamic Function General Usage) Avoid using xdmp:eval() and
-        xdmp:value() where possible.  Instead use xdmp:invoke() or xdmp:unpath() or, if
-        possible, function values to dynamically evaluate code logic.
+        (Dynamic Function Usage (Marklogic))
+        Avoid using xdmp:eval() and xdmp:value() where possible.
+        Instead use either xdmp:invoke(), xdmp:unpath()
+        or if possible assign functions to variables to dynamically evaluate code logic.
+        Please note that this check is Marklogic specific.
     </dd>
     <dt>OperationsInPredicate</dt>
     <dd>
-        (Avoid Operations in Predicates) Instead of calling
-        functions or performing operations in predicates try to assign the results in a
-        variable before the predicate.
+        (Avoid Operations in Predicates)
+        Instead of calling functions or performing operations in predicates
+        try assigning the results to a variable before the predicate.
     </dd>
 </dl>
 
@@ -139,44 +135,47 @@ maintainability.
 <dl>
     <dt>EffectiveBoolean</dt>
     <dd>
-        (Effective Boolean in Conditional Predicate) Unless the value
-        in the conditional is of type xs:boolean it is recommended you use fn:exists(),
-        fn:empty(), or other boolean functions inside of conditional predicates to check
-        values.
+        (Effective Boolean in Conditional Predicate)
+        Unless the value in the conditional is of type xs:boolean it is recommended you use
+        fn:exists(), fn:empty(), or other boolean functions inside of conditional predicates to check values.
     </dd>
     <dt>StrongTypingInFLWOR</dt>
     <dd>
-        (Use Strong Typing in FLWOR Expressions) Declare types for
-        FLWOR 'let' and 'for' clauses to increase readability and catch potential bugs.
-        Also try to scope the types as narrowly as possible (i.e. use 'element()'
-        instead of 'item()' when the value is an element) and include quantifiers on
-        each type.
+        (Use Strong Typing in FLWOR Expressions)
+        Declare types for FLWOR 'let' and 'for' clauses to increase readability and catch potential bugs.
+        Also try to scope the types as narrowly as possible
+        (i.e. use 'element()' instead of 'item()' when the value is an element)
+        and include quantifiers on each type.
     </dd>
     <dt>FunctionMapping</dt>
     <dd>
-        (Function Mapping Usage) Make sure you are intentionally using
-        and/or understand function mapping - otherwise disable it with 'declare option
-        xdmp:mapping "false";'  If you wish to use it you should explicitly declare
-        'declare option xdmp:mapping "true";' for readability/maintainability.
+        (Function Mapping Usage (Marklogic))
+        Make sure you are intentionally using and/or understand function mapping
+        - otherwise disable it with 'declare option xdmp:mapping "false";'.
+        If you wish to use it you should explicitly declare 'declare option xdmp:mapping "true";'
+        for readability/maintainability.
+        Please note that this check is Marklogic specific.
     </dd>
-    <dt>XPathDecendantSteps</dt>
+    <dt>XPathDescendantSteps</dt>
     <dd>
-        (Avoid Using '//' in XPath) Favor fully-qualified paths in
-        XPath for readability and to avoid potential performance problems.
+        (Avoid Using '//' in XPath)
+        Favor fully-qualified paths in XPath
+        for readability and to avoid potential performance problems.
     </dd>
     <dt>XPathTextSteps</dt>
     <dd>
-        (Avoid Using text() in XPath) Generally avoid using text() in
-        your XPath in favor of using fn:string() or allowing atomization (through strong
-        typing or default atomization).
+        (Avoid Using text() in XPath)
+        Generally avoid using /text() in your XPath in favor of using fn:string() or allowing atomization
+        (through strong typing or default atomization).
     </dd>
     <dt>XQueryVersion</dt>
     <dd>
-        (MarkLogic XQuery Version) Ensure that you declare the latest
-        XQuery version (1.0-ml) at the top of each of your scripts (as opposed to
-        declaring an older version - 0.9-ml - or declaring no version at all).  This
-        ensures better compatibility of code after server upgrades and helps maintain
-        consistent behavior in XQuery processing.
+        (XQuery Version)
+        Ensure that you declare the latest XQuery version (1.0-ml/3.0)
+        at the top of each of your scripts
+        (as opposed to declaring an older version - 0.9-ml - or not declaring a version at all).
+        This ensures better compatibility of code after server upgrades
+        and consistent behavior in XQuery processing.
     </dd>
 </dl>
 
@@ -189,21 +188,21 @@ are just "good to know," or their full validity is in question.
 <dl>
     <dt>OrderByRange</dt>
     <dd>
-        (Range Evaulation in Order By Clause) Order bys or gt/lt checks on
-        large numbers of documents might get better performance with a range index.
+        (Range Evaulation in Order By Clause)
+        Order bys or gt/lt checks on large numbers of documents
+        might achieve better performance with a range index.
     </dd>
     <dt>ParseError</dt>
     <dd>
-        (Code Parsing Error) This is to catch parsing errors on projects.
-        There may be a potential syntax error, or the parser just may not be able to
-        process certain syntax.  Technically this rule does not take part in the AST
-        parsing.
+        (Code Parsing Error)
+        This is to catch parsing errors on projects.
+        There may be a potential syntax error, or the parser just may not be able to process certain syntax.
     </dd>
-    <dt>XPathSubExpresssionsInPredicate</dt>
+    <dt>XPathSubExpressionsInPredicate</dt>
     <dd>
-        (Avoid XPath Sub-expressions in XPath)
-        Predicates Watch expressions like '[foo/bar]' or '[foo[bar]]' because they can
-        sometimes be bad for performance.  If the result is static it can be bound to a
-        variable.
+        (Avoid XPath Sub-expressions in XPath Predicates)
+        Watch out for expressions like '[foo/bar]' or '[foo[bar]]'
+        because they can sometimes be bad for performance.
+        If the result is static it can be bound to a variable.
     </dd>
 </dl>

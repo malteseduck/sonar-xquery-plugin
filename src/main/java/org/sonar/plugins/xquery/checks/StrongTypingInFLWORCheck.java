@@ -17,7 +17,10 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
 @Rule(
     key = "StrongTypingInFLWOR",
     name = "Use Strong Typing FLWOR Expressions",
-    description = "Declare types for FLWOR 'let' and 'for' clauses to increase readability and catch potential bugs.  Also try to scope the types as narrowly as possible (i.e. use 'element()' instead of 'item()' when the value is an element) and include quantifiers on each type.",
+    description = "Declare types for FLWOR 'let' and 'for' clauses to increase readability and catch potential bugs. " +
+            "Also try to scope the types as narrowly as possible " +
+            "(i.e. use 'element()' instead of 'item()' when the value is an element) " +
+            "and include quantifiers on each type.",
     priority = Priority.MINOR
 )
 public class StrongTypingInFLWORCheck extends AbstractCheck {

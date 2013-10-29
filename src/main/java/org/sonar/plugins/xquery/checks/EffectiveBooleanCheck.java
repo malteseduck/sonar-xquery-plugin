@@ -20,7 +20,8 @@ import org.sonar.plugins.xquery.parser.node.Function;
 @Rule(
     key = "EffectiveBoolean",
     name = "Effective Boolean in Conditional Predicate",
-    description = "Unless the value in the conditional is of type xs:boolean it is recommended you use fn:exists(), fn:empty(), or other boolean functions inside of conditional predicates to check values.",
+    description = "Unless the value in the conditional is of type xs:boolean it is recommended you use " +
+            "fn:exists(), fn:empty(), or other boolean functions inside of conditional predicates to check values.",
     priority = Priority.MINOR
 )
 public class EffectiveBooleanCheck extends AbstractCheck {

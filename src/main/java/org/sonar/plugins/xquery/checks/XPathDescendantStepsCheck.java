@@ -12,24 +12,25 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
 
 /**
  * Checks for usage of text() XPath steps.
- * 
+ *
  * @since 1.0
  */
 @Rule(
-		key = "XpathDecendantSteps",
-		name = "Avoid Using '//' in XPath",
-		description = "Favor fully-qualified paths in XPath for readability and to avoid potential performance problems.",
-		priority = Priority.MINOR)
-public class XPathDecendantStepsCheck extends AbstractPathCheck {
+        key = "XpathDescendantSteps",
+        name = "Avoid Using '//' in XPath",
+        description = "Favor fully-qualified paths in XPath " +
+                "for readability and to avoid potential performance problems.",
+        priority = Priority.MINOR)
+public class XPathDescendantStepsCheck extends AbstractPathCheck {
 
     @Override
     public void enterExpression(XQueryTree node) {
         super.enterExpression(node);
         if (XQueryParser.PathExpr == node.getType()) {
             String expr = node.getValue();
-            if (StringUtils.contains(expr, "//")) {                
+            if (StringUtils.contains(expr, "//")) {
                 createViolations(node, "//");
             }
-        }            
+        }
     }
 }

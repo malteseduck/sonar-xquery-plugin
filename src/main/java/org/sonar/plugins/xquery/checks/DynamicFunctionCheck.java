@@ -16,8 +16,11 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
  */
 @Rule(
 		key = "DynamicFunction",
-		name = "Dynamic Function Usage",
-		description = "Avoid using xdmp:eval() and xdmp:value() where possible.  Instead use xdmp:invoke() or xdmp:unpath() or, if possible, function values to dynamically evaluate code logic.",
+		name = "Dynamic Function Usage (Marklogic)",
+		description = "Avoid using xdmp:eval() and xdmp:value() where possible. " +
+                "Instead use either xdmp:invoke(), xdmp:unpath() " +
+                "or if possible assign functions to variables to dynamically evaluate code logic.\n" +
+                "Please note that this check is Marklogic specific.",
 		priority = Priority.MAJOR)
 public class DynamicFunctionCheck extends AbstractCheck {
 

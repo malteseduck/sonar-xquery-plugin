@@ -16,8 +16,12 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
  */
 @Rule(
     key = "XQueryVersion",
-    name = "MarkLogic XQuery Version",
-    description = "Ensure that you declare the latest XQuery version (1.0-ml) at the top of each of your scripts (as opposed to declaring an older version - 0.9-ml - or not declaring a version at all).  This ensures better compatibility of code after server upgrades and consistent behavior in XQuery processing.",
+    name = "XQuery Version",
+    description = "Ensure that you declare the latest XQuery version (1.0-ml/3.0) " +
+            "at the top of each of your scripts " +
+            "(as opposed to declaring an older version - 0.9-ml - or not declaring a version at all). " +
+            "This ensures better compatibility of code after server upgrades " +
+            "and consistent behavior in XQuery processing.",
     priority = Priority.MINOR
 )
 public class XQueryVersionCheck extends AbstractCheck {
