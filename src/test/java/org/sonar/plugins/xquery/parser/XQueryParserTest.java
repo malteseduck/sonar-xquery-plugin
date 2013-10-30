@@ -529,7 +529,7 @@ public class XQueryParserTest extends AbstractSonarTest {
         // TODO: Doesn't recognize "text()" as a function?
 //        Assert.assertEquals(tree.getValue("PathExpr.FunctionCall.FunctionName.QName"), "text", "Function name");
         Assert.assertEquals(tree.getValue("PathExpr"), "/ QName / QName / text ( )", "XPath with text() function");
-    }    
+    }
 
     @Test
     public void testFunctionCallWithEntity() throws RecognitionException {
@@ -541,7 +541,7 @@ public class XQueryParserTest extends AbstractSonarTest {
             )
         );
         Assert.assertEquals(tree.getValue("FunctionCall.FunctionName.QName"), "fn : substring-before", "Argument function name");
-        
+
         XQueryTree arguments = tree.find("FunctionCall.ArgumentList");
         Assert.assertNotNull(arguments, "Function arguments");
         Assert.assertEquals(arguments.getChildCount(), 2, "Function number of arguments");
@@ -564,13 +564,13 @@ public class XQueryParserTest extends AbstractSonarTest {
                 ")"
             )
         );
-        
+
         XQueryTree parenthesized = tree.find("IfExpr.IfThen.ParenthesizedExpr.ParenthesizedExpr");
         Assert.assertNotNull(parenthesized, "Nested parenthesized");
-        Assert.assertEquals(parenthesized.getChildCount(), 2, "Nested parenthesized expressions");        
+        Assert.assertEquals(parenthesized.getChildCount(), 2, "Nested parenthesized expressions");
         Assert.assertEquals(parenthesized.getChild(1).getValue("StringLiteral"), "&rdquo;", "Nested &rdquo; entity");
     }
-    
+
     @Test
     public void testFunctionTypes() throws RecognitionException {
         log("testFunctionTypes():");
@@ -584,13 +584,14 @@ public class XQueryParserTest extends AbstractSonarTest {
                 "local:add(1, 1)"
             )
         );
-        
+
         Assert.assertEquals(tree.getTextValue("FunctionDecl.FunctionName.QName"), "local:add", "Function name");
-        Assert.assertEquals(tree.getValue("FunctionDecl.ParamList.Param.ParamName.QName"), "a", "First param variable name");        
-        Assert.assertEquals(tree.getTypeValue("FunctionDecl.ParamList.Param.TypeDeclaration"), "xs:integer", "First param variable type");        
+        Assert.assertEquals(tree.getValue("FunctionDecl.ParamList.Param.ParamName.QName"), "a",
+                "First param variable name");
+        Assert.assertEquals(tree.getTypeValue("FunctionDecl.ParamList.Param.TypeDeclaration"), "xs:integer", "First param variable type");
         Assert.assertEquals(tree.getTypeValue("FunctionDecl.ReturnType"), "xs:integer", "Return type");
     }
-    
+
     @Test
     public void testFunctionTypeBinaryReturn() throws RecognitionException {
         log("testFunctionTypeBinaryReturn():");
@@ -1100,5 +1101,129 @@ public class XQueryParserTest extends AbstractSonarTest {
             )
         );
         Assert.assertEquals(tree.getValue("QueryBody.PathExpr"), "/ QName / QName / text ( )", "XPath expression");
-    }      
+    }
+
+    @Test
+    public void testFunctionWithPrivateAnnotationForMarklogicVersion() throws RecognitionException {
+        log("testFunctionWithPrivateAnnotationForMarklogicVersion():");
+        XQueryTree tree = parse(
+                code(
+                        "xquery version '1.0-ml';",
+                        "declare %private function local:add($a as xs:integer?, $b as xs:integer?)",
+                        "as xs:integer? {",
+                        "    $a + $b",
+                        "};",
+                        "local:add(1, 1)"
+                )
+        );
+
+        Assert.assertEquals(tree.getValue("OrderedDecls.QName"), "private", "Annotation name");
+    }
+
+    @Test
+    public void testFunctionWithAnyAnnotationForMarklogicVersion() throws RecognitionException {
+        log("testFunctionWithAnyAnnotationForMarklogicVersion():");
+        XQueryTree tree = parse(
+                code(
+                        "xquery version '1.0-ml';",
+                        "declare %java:method(\"java.lang.StrictMath.copySign\") function local:add($a as xs:integer?, $b as xs:integer?)",
+                        "as xs:integer? {",
+                        "    $a + $b",
+                        "};",
+                        "local:add(1, 1)"
+                )
+        );
+
+        Assert.assertEquals(tree.getValue("OrderedDecls.QName"), "java : method", "Annotation name");
+    }
+
+    @Test
+    public void testFunctionWithPrivateAnnotationForXQuery30() throws RecognitionException {
+        log("testFunctionWithPrivateAnnotationForXQuery30():");
+        XQueryTree tree = parse(
+                code(
+                        "xquery version '3.0';",
+                        "declare %private function local:add($a as xs:integer?, $b as xs:integer?)",
+                        "as xs:integer? {",
+                        "    $a + $b",
+                        "};",
+                        "local:add(1, 1)"
+                )
+        );
+
+        Assert.assertEquals(tree.getValue("OrderedDecls.QName"), "private", "Annotation name");
+    }
+
+    @Test
+    public void testFunctionWithAnyAnnotationForXQuery30() throws RecognitionException {
+        log("testFunctionWithAnyAnnotationForXQuery30():");
+        XQueryTree tree = parse(
+                code(
+                        "xquery version '3.0';",
+                        "declare %java:method(\"java.lang.StrictMath.copySign\") function local:add($a as xs:integer?, $b as xs:integer?)",
+                        "as xs:integer? {",
+                        "    $a + $b",
+                        "};",
+                        "local:add(1, 1)"
+                )
+        );
+
+        Assert.assertEquals(tree.getValue("OrderedDecls.QName"), "java : method", "Annotation name");
+    }
+
+    @Test
+    public void testVariableWithPrivateAnnotationForMarklogicVersion() throws RecognitionException {
+        log("testVariableWithPrivateAnnotationForMarklogicVersion():");
+        XQueryTree tree = parse(
+                code(
+                        "xquery version '1.0-ml';",
+                        "declare %private variable $test as xs:string := 'test';",
+                        "$test"
+                )
+        );
+
+        Assert.assertEquals(tree.getValue("OrderedDecls.QName"), "private", "Annotation name");
+    }
+
+    @Test
+    public void testVariableWithAnyAnnotationForMarklogicVersion() throws RecognitionException {
+        log("testVariableWithPrivateAnnotationForMarklogicVersion():");
+        XQueryTree tree = parse(
+                code(
+                        "xquery version '1.0-ml';",
+                        "declare %eg:volatile variable $test as xs:string := 'test';",
+                        "$test"
+                )
+        );
+
+        Assert.assertEquals(tree.getValue("OrderedDecls.QName"), "eg : volatile", "Annotation name");
+    }
+
+    @Test
+    public void testVariableWithPrivateAnnotationForXQuery30() throws RecognitionException {
+        log("testVariableWithPrivateAnnotationForXQuery30():");
+        XQueryTree tree = parse(
+                code(
+                        "xquery version '3.0';",
+                        "declare %private variable $test as xs:string := 'test';",
+                        "$test"
+                )
+        );
+
+        Assert.assertEquals(tree.getValue("OrderedDecls.QName"), "private", "Annotation name");
+    }
+
+    @Test
+    public void testVariableWithAnyAnnotationForXQuery30() throws RecognitionException {
+        log("testVariableWithPrivateAnnotationForXQuery30():");
+        XQueryTree tree = parse(
+                code(
+                        "xquery version '3.0';",
+                        "declare %eg:volatile variable $test as xs:string := 'test';",
+                        "$test"
+                )
+        );
+
+        Assert.assertEquals(tree.getValue("OrderedDecls.QName"), "eg : volatile", "Annotation name");
+    }
 }
