@@ -16,8 +16,12 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
  */
 @Rule(
 	key = "FunctionMapping",
-	name = "Function Mapping Usage",
-	description = "Make sure you are intentionally using and/or understand function mapping - otherwise disable it with 'declare option xdmp:mapping \"false\";'  If you wish to use it you should explicitly declare 'declare option xdmp:mapping \"true\";' for readability/maintainability.",
+	name = "Function Mapping Usage (Marklogic)",
+	description = "Make sure you are intentionally using and/or understand function mapping " +
+            "- otherwise disable it with 'declare option xdmp:mapping \"false\";'. " +
+            "If you wish to use it you should explicitly declare 'declare option xdmp:mapping \"true\";' " +
+            "for readability/maintainability.\n" +
+            "Please note that this check is Marklogic specific.",
 	priority = Priority.MAJOR
 )
 public class FunctionMappingCheck extends AbstractCheck {

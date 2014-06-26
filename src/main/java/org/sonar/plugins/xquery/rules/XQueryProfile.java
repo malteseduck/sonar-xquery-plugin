@@ -14,7 +14,7 @@ import org.sonar.plugins.xquery.api.XQueryConstants;
 import java.util.List;
 
 /**
- * Default MarkLogic XQuery profile.
+ * Default XQuery profile.
  * 
  * @since 1.0
  */

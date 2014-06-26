@@ -410,15 +410,15 @@ public class XQueryParserTest extends AbstractSonarTest {
             )
         );
         
-        XQueryTree flowr = tree.find("FLOWRExpr");
-        Assert.assertNotNull(flowr, "FLOWR expression");
-        Assert.assertEquals(flowr.getChildCount(), 3, "FLOWR expression clauses");
+        XQueryTree flwor = tree.find("FLOWRExpr");
+        Assert.assertNotNull(flwor, "FLOWR expression");
+        Assert.assertEquals(flwor.getChildCount(), 3, "FLOWR expression clauses");
        
-        Assert.assertEquals(flowr.getValue("ForClause.ForName.QName"), "article", "For clause variable name");
-        Assert.assertEquals(flowr.getValue("ForClause.ForBinding.PathExpr"), "/ QName", "For clause binding XPath expression");
-        Assert.assertEquals(flowr.getValue("OrderByClause.OrderSpecList.OrderSpec.UnaryExpr.PathExpr"), "$ QName / QName", "First order specification expression");
-        Assert.assertEquals(flowr.getValue("OrderByClause.OrderSpecList.OrderSpec.OrderModifier"), "ascending", "First order specification modifier");
-        Assert.assertEquals(flowr.getValue("ReturnClause.QName"), "article", "Return clause variable name");
+        Assert.assertEquals(flwor.getValue("ForClause.ForName.QName"), "article", "For clause variable name");
+        Assert.assertEquals(flwor.getValue("ForClause.ForBinding.PathExpr"), "/ QName", "For clause binding XPath expression");
+        Assert.assertEquals(flwor.getValue("OrderByClause.OrderSpecList.OrderSpec.UnaryExpr.PathExpr"), "$ QName / QName", "First order specification expression");
+        Assert.assertEquals(flwor.getValue("OrderByClause.OrderSpecList.OrderSpec.OrderModifier"), "ascending", "First order specification modifier");
+        Assert.assertEquals(flwor.getValue("ReturnClause.QName"), "article", "Return clause variable name");
     }
 
     @Test
@@ -437,11 +437,11 @@ public class XQueryParserTest extends AbstractSonarTest {
             )
         );
         
-        XQueryTree flowr = tree.find("FLOWRExpr");
-        Assert.assertNotNull(flowr, "FLOWR expression");
-        Assert.assertEquals(flowr.getChildCount(), 2, "FLOWR expression clauses");
+        XQueryTree flwor = tree.find("FLOWRExpr");
+        Assert.assertNotNull(flwor, "FLOWR expression");
+        Assert.assertEquals(flwor.getChildCount(), 2, "FLOWR expression clauses");
        
-        XQueryTree returns = flowr.find("ReturnClause.ParenthesizedExpr");
+        XQueryTree returns = flwor.find("ReturnClause.ParenthesizedExpr");
         Assert.assertNotNull(returns, "Parenthesized expression root");
         Assert.assertEquals(returns.getChildCount(), 2, "Parenthesized expressions");
     }

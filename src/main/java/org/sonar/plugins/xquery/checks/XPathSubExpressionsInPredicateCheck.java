@@ -17,7 +17,9 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
 @Rule(
     key = "XPathSubExpressionsInPredicate",
     name = "Avoid XPath Sub-expressions in XPath Predicates",
-    description = "Watch expressions like '[foo/bar]' or '[foo[bar]]' because they can sometimes be bad for performance.  If the result is static it can be bound to a variable.",
+    description = "Watch out for expressions like '[foo/bar]' or '[foo[bar]]' " +
+            "because they can sometimes be bad for performance. " +
+            "If the result is static it can be bound to a variable.",
     priority = Priority.INFO
 )
 public class XPathSubExpressionsInPredicateCheck extends AbstractPredicateCheck {

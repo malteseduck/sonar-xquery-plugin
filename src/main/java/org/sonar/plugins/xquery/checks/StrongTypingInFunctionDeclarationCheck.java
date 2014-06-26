@@ -17,7 +17,11 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
 @Rule(
     key = "StrongTypingInFunctionDeclaration",
     name = "Use Strong Typing in Function Declarations",
-    description = "Declare types for function parameters and return type to increase readability and catch potential bugs.  Also try to scope the types as narrowly as possible (i.e. use 'element()' instead of 'item()' when returning an element) and include quantifiers on each type.",
+    description = "Declare types for function parameters and return types " +
+            "to increase readability and catch potential bugs. " +
+            "Also try to scope the types as narrowly as possible " +
+            "(i.e. use 'element()' instead of 'item()' when returning an element) " +
+            "and include quantifiers on each type.",
     priority = Priority.CRITICAL
 )
 public class StrongTypingInFunctionDeclarationCheck extends AbstractCheck {

@@ -7,9 +7,9 @@ package org.sonar.plugins.xquery.checks;
 import org.sonar.plugins.xquery.AbstractSonarTest;
 import org.testng.annotations.Test;
 
-public class XPathDecendantStepsCheckTest extends AbstractSonarTest {
+public class XPathDescendantStepsCheckTest extends AbstractSonarTest {
 
-    private final AbstractCheck check = new XPathDecendantStepsCheck();
+    private final AbstractCheck check = new XPathDescendantStepsCheck();
     
     @Test
     public void testInvalid() {

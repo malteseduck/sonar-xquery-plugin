@@ -26,7 +26,7 @@ public final class CheckClasses {
             StrongTypingInFLWORCheck.class,
             StrongTypingInFunctionDeclarationCheck.class,
             StrongTypingInModuleVariableCheck.class,
-            XPathDecendantStepsCheck.class,
+            XPathDescendantStepsCheck.class,
             XPathSubExpressionsInPredicateCheck.class,
             XPathTextStepsCheck.class,
             XQueryVersionCheck.class,
