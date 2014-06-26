@@ -1541,6 +1541,8 @@ p_NCName
         | BINARY
         // entity references
         | AMP_ER | APOS_ER | QUOT_ER
+        // support private as NCName not only as a Marklogic private keyword
+        | PRIVATE
         ;
 p_FNCName
         : L_NCName
