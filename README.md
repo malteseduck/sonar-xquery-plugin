@@ -18,10 +18,12 @@ on 3.0 syntax should not be to disruptive.
 Usage
 -----
 
+###Sonar runner
 To build the plugin, run the unit tests, and start up a test instance of Sonar just run
 the following:
-
-    mvn install org.codehaus.sonar:sonar-dev-maven-plugin::start-war -Dsonar.runtimeVersion=3.5
+``` sh
+mvn install org.codehaus.sonar:sonar-dev-maven-plugin::start-war -Dsonar.runtimeVersion=3.5
+```
 
 The simplest approach to run the analysis on a project is to use the runner (see
 http://docs.codehaus.org/display/SONAR/Analyzing+with+SonarQube+Runner).  Here is an example
@@ -55,6 +57,69 @@ run analysis on projects using maven, gradle, etc. see the documentation on the 
 site:
 
 http://docs.codehaus.org/display/SONAR/Analyzing+Source+Code
+
+###Maven
+To prepare an example maven project that hosts both java and source code
+and is able to run both java and xquery code sonar analysis do as below:
+* Run below command to generate project from archetype:
+``` sh
+mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=xquery-java-example-app -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+```
+
+* Modify generated pom.xml file so that it looks like the one below:
+
+```xml
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.mycompany.app</groupId>
+  <artifactId>xquery-java-example-app</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>xquery-java-example-app</name>
+  <url>http://maven.apache.org</url>
+  <properties>
+    <overridenSourceDirectory>src/main/java</overridenSourceDirectory>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <sourceDirectory>${overridenSourceDirectory}</sourceDirectory>
+  </build>
+  <profiles>
+    <profile>
+      <id>sonar-xquery</id>
+      <properties>
+        <overridenSourceDirectory>src/main/xquery</overridenSourceDirectory>
+        <sonar.branch>XQuery</sonar.branch>
+        <sonar.language>xquery</sonar.language>
+      </properties>
+    </profile>
+  </profiles>
+</project>
+```
+
+* Add your java code under src/main/java
+* Add your xquery code under src/main/xquery
+* Run below command to run check for java:
+``` sh
+mvn sonar:sonar
+```
+
+* Run below command to run check for xquery:
+``` sh
+    mvn sonar:sonar -Psonar-xquery
+```
+
+
+Additional information about multi-language setup for sonar can be found in
+[stackoverflow answer](http://stackoverflow.com/questions/13625022/does-sonar-support-multiple-language-in-same-project)
 
 Language Checks
 ---------------
