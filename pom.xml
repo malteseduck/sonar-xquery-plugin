@@ -15,23 +15,31 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <sonar.buildVersion>3.7</sonar.buildVersion>
+        <sonar.version>4.3</sonar.version>
         <jdk.min.version>1.6</jdk.min.version>
     </properties>
 
     <dependencies>
+
+
         <dependency>
             <groupId>org.codehaus.sonar</groupId>
             <artifactId>sonar-plugin-api</artifactId>
-            <version>${sonar.buildVersion}</version>
+            <version>${sonar.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.sonar</groupId>
             <artifactId>sonar-testing-harness</artifactId>
-            <version>${sonar.buildVersion}</version>
+            <version>${sonar.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.codehaus.sonar</groupId>
+            <artifactId>sonar-deprecated</artifactId>
+            <version>${sonar.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.codehaus.sonar.plugins</groupId>
             <artifactId>sonar-surefire-plugin</artifactId>

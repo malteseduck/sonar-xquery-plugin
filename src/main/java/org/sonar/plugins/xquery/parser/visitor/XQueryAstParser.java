@@ -50,9 +50,7 @@ public class XQueryAstParser {
 
     /**
      * Do a quick pass and map the global declarations for the specified tree
-     * 
-     * @param tree
-     * @param mapper
+     *
      */
     public void mapDependencies(XQueryTree tree, DependencyMapper mapper) {
         // Since the mapper doesn't use any of the parameters, just pass in

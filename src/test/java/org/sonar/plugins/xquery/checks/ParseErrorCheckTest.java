@@ -26,7 +26,7 @@ public class ParseErrorCheckTest extends AbstractSonarTest {
             )
         );
         setReporter(null);
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
 
     @Test

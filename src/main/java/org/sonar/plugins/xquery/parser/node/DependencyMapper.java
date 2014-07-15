@@ -5,6 +5,7 @@
 package org.sonar.plugins.xquery.parser.node;
 
 import org.apache.commons.lang.StringUtils;
+import org.sonar.api.issue.Issuable;
 import org.sonar.plugins.xquery.language.SourceCode;
 import org.sonar.plugins.xquery.parser.XQueryParser;
 import org.sonar.plugins.xquery.parser.XQueryTree;

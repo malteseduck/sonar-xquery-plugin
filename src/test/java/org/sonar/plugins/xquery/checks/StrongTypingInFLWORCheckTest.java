@@ -23,7 +23,7 @@ public class StrongTypingInFLWORCheckTest extends AbstractSonarTest {
                 "    $title"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
     
     @Test
@@ -38,7 +38,7 @@ public class StrongTypingInFLWORCheckTest extends AbstractSonarTest {
                 "    $title"
             )
         );
-        assertViolationLine(check, 3);
+        assertIssueLine(check, 3);
     }
 
     @Test

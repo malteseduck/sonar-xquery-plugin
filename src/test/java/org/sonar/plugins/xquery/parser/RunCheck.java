@@ -41,8 +41,6 @@ public class RunCheck {
         AbstractCheck check = new DynamicFunctionCheck();
         DependencyMapper mapper = new DependencyMapper();
         SourceCode code = new XQuerySourceCode(FileUtils.fileRead(PATH));
-        Rule rule = (new AnnotationRuleParser().parse("test", Arrays.asList(new Class[]{check.getClass()}))).get(0);
-        check.setRule(rule);
         XQueryAstParser parser = new XQueryAstParser(code, Arrays.asList(new XQueryAstVisitor[] { mapper, check }));
 
         try {

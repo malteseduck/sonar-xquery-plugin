@@ -19,9 +19,11 @@ public abstract class AbstractProhibitStringValueCheck extends AbstractCheck {
         {
     	   String value = node.getValue();
     	   if (Pattern.matches(getPattern(), value)) {
-    		   createViolation(node.getLine());
+    		   createIssue(node.getLine());
     	   }
         }
     }
+
+    abstract protected void createIssue(int lineNumber);
     abstract protected String getPattern();
 }

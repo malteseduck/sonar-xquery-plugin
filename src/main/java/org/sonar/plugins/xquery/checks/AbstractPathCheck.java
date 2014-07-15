@@ -4,6 +4,7 @@
 
 package org.sonar.plugins.xquery.checks;
 
+import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.xquery.parser.XQueryTree;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class AbstractPathCheck extends AbstractCheck {
      * @return the line number of the expression, or of the node if the
      *         expression wasn't found
      */
-    protected void createViolations(XQueryTree expr, String expression) {
+    protected void createViolations(RuleKey rule, XQueryTree expr, String expression) {
         List<XQueryTree> children = expr.getChildren();
         int size = children.size();
         for (int i = 0; i < size; i++) {
@@ -40,7 +41,7 @@ public class AbstractPathCheck extends AbstractCheck {
                 if (index < size + 1) {
                     index++;
                 }
-                createViolation(children.get(index).getLine());
+                createIssue(rule, children.get(index).getLine());
             }
         }
     }

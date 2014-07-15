@@ -20,7 +20,7 @@ public class XPathSubExpressionsInPredicateCheckTest extends AbstractSonarTest {
                 "/ldswebml[search-meta/title]"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
 
     @Test
@@ -32,7 +32,7 @@ public class XPathSubExpressionsInPredicateCheckTest extends AbstractSonarTest {
                 "/ldswebml[search-meta[title]]"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
 
     @Test

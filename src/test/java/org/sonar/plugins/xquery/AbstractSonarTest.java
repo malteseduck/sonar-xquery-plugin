@@ -4,7 +4,6 @@
 
 package org.sonar.plugins.xquery;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,22 +12,12 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.debug.ParseTreeBuilder;
-import org.antlr.runtime.debug.XQueryParseTreeBuilder;
-import org.codehaus.plexus.util.FileUtils;
-import org.sonar.api.rules.AnnotationRuleParser;
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.Violation;
 import org.sonar.plugins.xquery.checks.AbstractCheck;
+import org.sonar.plugins.xquery.language.Issue;
 import org.sonar.plugins.xquery.language.SourceCode;
 import org.sonar.plugins.xquery.language.XQuerySourceCode;
-import org.sonar.plugins.xquery.parser.LazyTokenStream;
-import org.sonar.plugins.xquery.parser.XQueryLexer;
-import org.sonar.plugins.xquery.parser.XQueryParser;
 import org.sonar.plugins.xquery.parser.XQueryTree;
-import org.sonar.plugins.xquery.parser.XQueryTreeAdaptor;
 import org.sonar.plugins.xquery.parser.node.DependencyMapper;
 import org.sonar.plugins.xquery.parser.reporter.ProblemReporter;
 import org.sonar.plugins.xquery.parser.visitor.XQueryAstParser;
@@ -67,34 +56,34 @@ public class AbstractSonarTest {
     private boolean tracing = false;
 
     /**
-     * Checks to see if the violations are on the specified line. If the
-     * violations are on a different line or there is more than one violation
+     * Checks to see if the issues are on the specified line. If the
+     * issues are on a different line or there is more than one issue
      * then this fails the test.
      * 
      * @param check
      *            The check that was processed
      * @param line
-     *            The line number where the violations should be
+     *            The line number where the issues should be
      */
-    public void assertViolationLine(AbstractCheck check, int line) {
-        assertViolationLines(check, new int[] { line });
+    public void assertIssueLine(AbstractCheck check, int line) {
+        assertIssueLines(check, new int[]{line});
     }
 
     /**
-     * Checks to see if the violations are at the specified lines. If the
-     * violations are on different lines or there is more than the specified
-     * number of violations then this fails the test.
+     * Checks to see if the issues are on the specified line. If the
+     * issues are on a different line or there is more than one issue
+     * then this fails the test.
      * 
      * @param check
      *            The check that was processed
      * @param lines
-     *            The line numbers where the violations should be
+     *            The line numbers where the issues should be
      */
-    public void assertViolationLines(AbstractCheck check, int[] lines) {
+    public void assertIssueLines(AbstractCheck check, int[] lines) {
         int index = 0;
-        Assert.assertNotNull(lines, "Violation lines");
-        for (Violation violation : getViolations(check, lines.length)) {
-            Assert.assertEquals(violation.getLineId().intValue(), lines[index], "Violation " + (index + 1) + " line number");
+        Assert.assertNotNull(lines, "Issue lines");
+        for (Issue issue : getIssues(check, lines.length)) {
+            Assert.assertEquals(issue.line(), lines[index], "Issue " + (index + 1) + " line number");
             index++;
         }
     }
@@ -110,8 +99,6 @@ public class AbstractSonarTest {
         */
    protected void check(AbstractCheck check, SourceCode code, DependencyMapper mapper) {
         // Set up the rule and parser for checking
-        Rule rule = (new AnnotationRuleParser().parse("test", Arrays.asList(new Class[] { check.getClass() }))).get(0);
-        check.setRule(rule);
         XQueryAstParser parser = new XQueryAstParser(code, Arrays.asList(new XQueryAstVisitor[] { mapper, check }));
 
         try {
@@ -139,7 +126,7 @@ public class AbstractSonarTest {
     
     /**
      * Checks to see if the source code will fail the check. Fails the test if
-     * it does not fail. Assumes there will be only 1 check violation.
+     * it does not fail. Assumes there will be only 1 check issue.
      * 
      * @param check
      *            A code check to process
@@ -153,7 +140,7 @@ public class AbstractSonarTest {
     
     /**
      * Checks to see if the source code will fail the check. Fails the test if
-     * it does not fail. You can specify the number of violations that are
+     * it does not fail. You can specify the number of issues that are
      * expected.
      * 
      * @param check
@@ -161,17 +148,17 @@ public class AbstractSonarTest {
      * @param code
      *            A snippet of source code
      * @param mapper TODO
-     * @param violations
-     *            The number of violations that are expected
+     * @param issues
+     *            The number of issues that are expected
      */
-    public void checkInvalid(AbstractCheck check, SourceCode code, DependencyMapper mapper, int violations) {
+    public void checkInvalid(AbstractCheck check, SourceCode code, DependencyMapper mapper, int issues) {
         check(check, code, mapper);
-        Assert.assertEquals(code.getViolations().size(), violations, "Code is invalid, violations");
+        Assert.assertEquals(code.getIssues().size(), issues, "Invalid - there should have been issues marked on the code");
     }
 
     
-    public void checkInvalid(AbstractCheck check, SourceCode code, int violations) {
-        checkInvalid(check, code, new DependencyMapper(), violations);
+    public void checkInvalid(AbstractCheck check, SourceCode code, int issues) {
+        checkInvalid(check, code, new DependencyMapper(), issues);
     }
 
     public void checkValid(AbstractCheck check, SourceCode code) {
@@ -195,10 +182,10 @@ public class AbstractSonarTest {
     public void checkValid(AbstractCheck check, SourceCode code, DependencyMapper mapper) {
         check(check, code, mapper);
 
-        if (code.getViolations().size() > 0) {
-            StringBuffer error = new StringBuffer("Code is valid, expected 0 violations but got:");
-            for (Violation violation : code.getViolations()) {
-                error.append("\n    - Violation on line ").append(violation.getLineId() + ": " + violation.getMessage());
+        if (code.getIssues().size() > 0) {
+            StringBuffer error = new StringBuffer("Code is valid, expected 0 issues but got:");
+            for (Issue issue : code.getIssues()) {
+                error.append("\n    - Issue on line ").append(issue.line() + ": " + issue.message());
             }
             Assert.fail(error.toString());
         }
@@ -220,42 +207,42 @@ public class AbstractSonarTest {
     }
 
     /**
-     * Returns the violation for the source code in the specified check at the
-     * specified index. If no violation exists at that index then the test will
+     * Returns the issue for the source code in the specified check at the
+     * specified index. If no issue exists at that index then the test will
      * fail.
      * 
      * @param check
      *            The check that was processed
      * @param index
-     *            The index of the violation for which to look
+     *            The index of the issue for which to look
      * @return The violation
      */
-    public Violation getViolation(AbstractCheck check, int index) {
+    public Issue getIssue(AbstractCheck check, int index) {
         SourceCode sourceCode = check.getSourceCode();
         Assert.assertNotNull(sourceCode, "Source code from check");
-        List<Violation> violations = sourceCode.getViolations();
-        int size = violations.size();
-        Assert.assertTrue(size > 0, "Number of violations");
+        List<Issue> issues = sourceCode.getIssues();
+        int size = issues.size();
+        Assert.assertTrue(size > 0, "Number of issues");
         Assert.assertTrue(size > index, "Requested index doesn't exist");
-        return violations.get(index);
+        return issues.get(index);
     }
 
     /**
-     * Returns the violations for the source code in the specified check at the
-     * specified index. If no violations exists then the test will fail.
+     * Returns the issues for the source code in the specified check at the
+     * specified index. If no issues exists then the test will fail.
      * 
      * @param check
      *            The check that was processed
      * @param count
-     *            The number of violations that are expected
-     * @return A list of all the violations
+     *            The number of issues that are expected
+     * @return A list of all the issues
      */
-    public List<Violation> getViolations(AbstractCheck check, int count) {
+    public List<Issue> getIssues(AbstractCheck check, int count) {
         SourceCode sourceCode = check.getSourceCode();
         Assert.assertNotNull(sourceCode, "Source code from check");
-        List<Violation> violations = sourceCode.getViolations();
-        Assert.assertEquals(violations.size(), count, "Number of violations");
-        return violations;
+        List<Issue> issues = sourceCode.getIssues();
+        Assert.assertEquals(issues.size(), count, "Number of issues");
+        return issues;
     }
 
     /**

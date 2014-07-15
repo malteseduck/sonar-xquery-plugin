@@ -41,14 +41,15 @@ public abstract class AbstractProhibitFunctionCheck extends AbstractCheck {
                            ( (passPrefix != null && passPrefix.equals(funcPrefix)) ||
                              (funcNamespace != null && funcNamespace.equals(getFunctionNamespace()) ) ) &&
                              functionName.equals(getFunctionName())) {
-                           createViolation(node.getLine());
+                           createIssue(node.getLine());
                        }
                    }
                    break;
         }
     }
 
-       abstract protected String getFunctionNamespace();
-       abstract protected String getFunctionName();
-       abstract protected String getFunctionPrefix();
+    abstract protected void createIssue(int lineNumber);
+    abstract protected String getFunctionNamespace();
+    abstract protected String getFunctionName();
+    abstract protected String getFunctionPrefix();
 }

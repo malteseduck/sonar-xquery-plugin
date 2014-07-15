@@ -26,7 +26,7 @@ public class LogCheckTest extends AbstractSonarTest{
                 "xdmp:log('We should not have this')"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
 
     @Test

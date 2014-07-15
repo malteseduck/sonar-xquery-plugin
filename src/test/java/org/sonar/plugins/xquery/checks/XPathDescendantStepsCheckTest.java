@@ -20,7 +20,7 @@ public class XPathDescendantStepsCheckTest extends AbstractSonarTest {
                 "/article//title"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
 
     @Test
@@ -34,7 +34,7 @@ public class XPathDescendantStepsCheckTest extends AbstractSonarTest {
                 ")[2]//ss:server-status/ss:server-name"
             )
         );
-        assertViolationLine(check, 4);
+        assertIssueLine(check, 4);
     }
 
     @Test
@@ -49,7 +49,7 @@ public class XPathDescendantStepsCheckTest extends AbstractSonarTest {
             ),
             2
         );
-        assertViolationLines(check, new int[] { 2, 4 });
+        assertIssueLines(check, new int[]{2, 4});
     }    
     
     @Test

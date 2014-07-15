@@ -22,7 +22,7 @@ public class DynamicFunctionCheckTest extends AbstractSonarTest {
                 "    $date"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
 
     @Test

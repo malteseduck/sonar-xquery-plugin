@@ -1,12 +1,13 @@
 /*
- * © 2013 by Intellectual Reserve, Inc. All rights reserved.
+ * © 2014 by Intellectual Reserve, Inc. All rights reserved.
  */
 
 package org.sonar.plugins.xquery.rules;
 
 import org.sonar.plugins.xquery.checks.*;
 
-import java.util.Arrays;
+import com.google.common.collect.ImmutableList;
+
 import java.util.List;
 
 /**
@@ -16,7 +17,13 @@ import java.util.List;
  */
 public final class CheckClasses {
 
-    private static final Class[] CLASSES = new Class[]{
+    public static final String REPOSITORY_KEY = "xquery";
+
+    private CheckClasses() {
+    }
+
+    public static List<Class> getChecks() {
+        return ImmutableList.<Class>of(
             DynamicFunctionCheck.class,
             EffectiveBooleanCheck.class,
             FunctionMappingCheck.class,
@@ -29,14 +36,7 @@ public final class CheckClasses {
             XPathDescendantStepsCheck.class,
             XPathSubExpressionsInPredicateCheck.class,
             XPathTextStepsCheck.class,
-            XQueryVersionCheck.class,
-    };
-
-    public static List<Class> getDefaultCheckClasses() {
-        return Arrays.asList(CLASSES);
-    }
-
-    public static List<Class> getCheckClasses() {
-        return Arrays.asList(CLASSES);
+            XQueryVersionCheck.class
+        );
     }
 }

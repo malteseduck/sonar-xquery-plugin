@@ -36,7 +36,7 @@ public final class XQuerySourceImporter extends AbstractSourceImporter {
     }
 
     private void saveSource(SensorContext context, InputFile file, boolean unitTest) {
-        Resource<?> resource = createResource(file.getFile(), project.getFileSystem().getSourceDirs(), unitTest);
+        Resource resource = createResource(file.getFile(), project.getFileSystem().getSourceDirs(), unitTest);
         if (resource != null) {
             try {
                 context.index(resource);
@@ -69,8 +69,8 @@ public final class XQuerySourceImporter extends AbstractSourceImporter {
     }
 
     @Override
-    protected Resource<?> createResource(File file, List<File> sourceDirs, boolean unitTest) {
-        Resource<?> resource = XQueryFile.fromIOFile(file, sourceDirs, unitTest);
+    protected Resource createResource(File file, List<File> sourceDirs, boolean unitTest) {
+        Resource resource = XQueryFile.fromIOFile(file, sourceDirs, unitTest);
         if (resource == null) {
             logger.fine("XquerySourceImporter failed for: " + file.getPath());
         } else {

@@ -53,7 +53,7 @@ public class XPathTextStepsCheckTest extends AbstractSonarTest {
                 "/article[title/text() eq 'Title']"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }    
 
     @Test
@@ -65,7 +65,7 @@ public class XPathTextStepsCheckTest extends AbstractSonarTest {
                 "/article/title/text()"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }      
     
     @Test
@@ -79,7 +79,7 @@ public class XPathTextStepsCheckTest extends AbstractSonarTest {
                 ")[2]/ss:server-status/ss:server-name/text()"
             )
         );
-        assertViolationLine(check, 4);
+        assertIssueLine(check, 4);
     }
 
     @Test
@@ -94,7 +94,7 @@ public class XPathTextStepsCheckTest extends AbstractSonarTest {
                 "    /text()"
             )
         );
-        assertViolationLine(check, 5);
+        assertIssueLine(check, 5);
     }
 
     @Test

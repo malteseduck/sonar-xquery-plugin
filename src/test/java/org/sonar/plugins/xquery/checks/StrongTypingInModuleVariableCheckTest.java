@@ -21,7 +21,7 @@ public class StrongTypingInModuleVariableCheckTest extends AbstractSonarTest {
                 "$a"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
     
     @Test

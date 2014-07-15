@@ -25,7 +25,7 @@ public class StrongTypingInFunctionDeclarationCheckTest extends AbstractSonarTes
                 "test:add(1, 1)"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
 
     @Test
@@ -42,7 +42,7 @@ public class StrongTypingInFunctionDeclarationCheckTest extends AbstractSonarTes
                 "test:add(1, 1)"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class StrongTypingInFunctionDeclarationCheckTest extends AbstractSonarTes
                 "test:add(1, 1)"
             )
         );
-        assertViolationLine(check, 3);
+        assertIssueLine(check, 3);
     }
     
     @Test
@@ -77,7 +77,7 @@ public class StrongTypingInFunctionDeclarationCheckTest extends AbstractSonarTes
                 "test:add(1, 1)"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }    
 
     @Test
@@ -94,7 +94,7 @@ public class StrongTypingInFunctionDeclarationCheckTest extends AbstractSonarTes
                 "test:add(1, 1)"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
     
     @Test

@@ -20,7 +20,7 @@ public class OrderByRangeCheckTest extends AbstractSonarTest {
                 "/article[index gt 0]"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
 
     //    @Test - the current parser doesn't handle entities well
@@ -48,7 +48,7 @@ public class OrderByRangeCheckTest extends AbstractSonarTest {
                 "return $article"
             )
         );
-        assertViolationLine(check, 3);
+        assertIssueLine(check, 3);
     }
 
     @Test

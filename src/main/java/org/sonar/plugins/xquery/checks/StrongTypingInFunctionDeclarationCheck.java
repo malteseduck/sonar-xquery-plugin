@@ -4,10 +4,12 @@
 
 package org.sonar.plugins.xquery.checks;
 
+import org.sonar.api.rule.RuleKey;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.xquery.parser.XQueryParser;
 import org.sonar.plugins.xquery.parser.XQueryTree;
+import org.sonar.plugins.xquery.rules.CheckClasses;
 
 /**
  * Checks for strong typing in function declarations
@@ -15,7 +17,7 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
  * @since 1.0
  */
 @Rule(
-    key = "StrongTypingInFunctionDeclaration",
+    key = StrongTypingInFunctionDeclarationCheck.RULE_KEY,
     name = "Use Strong Typing in Function Declarations",
     description = "Declare types for function parameters and return types " +
             "to increase readability and catch potential bugs. " +
@@ -25,6 +27,9 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
     priority = Priority.CRITICAL
 )
 public class StrongTypingInFunctionDeclarationCheck extends AbstractCheck {
+
+    public static final String RULE_KEY = "StrongTypingInFunctionDeclaration";
+    private static final RuleKey RULE = RuleKey.of(CheckClasses.REPOSITORY_KEY, RULE_KEY);
 
     @Override
     public void enterExpression(XQueryTree node) {
@@ -40,7 +45,7 @@ public class StrongTypingInFunctionDeclarationCheck extends AbstractCheck {
                     // If the parameter does not have a type declaration it is a violation
                     XQueryTree type = param.find("TypeDeclaration");
                     if (type == null) {
-                        createViolation(param.getLine());
+                        createIssue(RULE, param.getLine());
                     }
                 }
             }
@@ -48,7 +53,7 @@ public class StrongTypingInFunctionDeclarationCheck extends AbstractCheck {
             // Check the return type
             XQueryTree returnType = node.find("ReturnType");
             if (returnType == null || returnType.getChildCount() == 0) {
-                createViolation(node.getLine());
+                createIssue(RULE, node.getLine());
             }
         }
     }

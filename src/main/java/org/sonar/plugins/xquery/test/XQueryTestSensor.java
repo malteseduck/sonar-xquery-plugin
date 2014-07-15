@@ -2,24 +2,19 @@
  * © 2013 by Intellectual Reserve, Inc. All rights reserved.
  */
 
-package org.sonar.plugins.xquery.xqtest;
+package org.sonar.plugins.xquery.test;
 
-import org.apache.commons.lang.StringUtils;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Resource;
-import org.sonar.plugins.surefire.api.AbstractSurefireParser;
-import org.sonar.plugins.xquery.XQuerySensor;
 import org.sonar.plugins.xquery.api.XQueryConstants;
-import org.sonar.plugins.xquery.language.XQueryFile;
 
 import java.io.File;
 import java.util.logging.Logger;
 
-public class XQTestSensor implements Sensor {
+public class XQueryTestSensor implements Sensor {
 
-    private static final Logger logger = Logger.getLogger(XQuerySensor.class.getName());
+    private static final Logger logger = Logger.getLogger(XQueryTestSensor.class.getName());
 
     public boolean shouldExecuteOnProject(Project project) {
         return XQueryConstants.XQUERY_LANGUAGE_KEY.equals(project.getLanguageKey());
@@ -32,11 +27,11 @@ public class XQTestSensor implements Sensor {
 
     protected void collect(Project project, SensorContext context, File reportsDir) {
         logger.info("parsing " + reportsDir);
-        new AbstractSurefireParser() {            
-            protected Resource<?> getUnitTestResource(String key) {
-                return new XQueryFile(StringUtils.substringAfter(key, "/"), true);
-            }      
-        }.collect(project, context, reportsDir);
+//        new AbstractSurefireParser() {
+//            protected Resource getUnitTestResource(String key) {
+//                return new XQueryFile(StringUtils.substringAfter(key, "/"), true);
+//            }
+//        }.collect(project, context, reportsDir);
     }
 
     public static File getReportsDirectory(Project project) {
@@ -47,4 +42,5 @@ public class XQTestSensor implements Sensor {
             return project.getFileSystem().resolvePath(XQueryConstants.DEFAULT_XQTEST_DIRECTORY);
         }
     }
+
 }

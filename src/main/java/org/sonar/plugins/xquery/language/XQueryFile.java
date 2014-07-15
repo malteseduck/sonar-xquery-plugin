@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @since 1.10
  */
-public class XQueryFile extends Resource<Directory> {
+public class XQueryFile extends Resource {
 
     private String directoryKey;
     private String filename;

@@ -4,6 +4,7 @@
 
 package org.sonar.plugins.xquery.parser.visitor;
 
+import org.sonar.api.issue.Issuable;
 import org.sonar.plugins.xquery.language.SourceCode;
 import org.sonar.plugins.xquery.parser.XQueryTree;
 import org.sonar.plugins.xquery.parser.node.DependencyMapper;

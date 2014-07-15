@@ -20,7 +20,7 @@ public class OperationsInPredicateCheckTest extends AbstractSonarTest {
                 "/article[1 to $index + $buffer]"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
 
     @Test
@@ -32,7 +32,7 @@ public class OperationsInPredicateCheckTest extends AbstractSonarTest {
                 "/article[@locale = fn:concat('e', 'n', 'g')]"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
     
     @Test
@@ -44,7 +44,7 @@ public class OperationsInPredicateCheckTest extends AbstractSonarTest {
                 "/article[1 to $index div $buffer]"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }           
         
     @Test
@@ -89,7 +89,7 @@ public class OperationsInPredicateCheckTest extends AbstractSonarTest {
                 "/article[1 to xdmp:random()]"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
 
     @Test
@@ -104,7 +104,7 @@ public class OperationsInPredicateCheckTest extends AbstractSonarTest {
                 "    ]"
             )
         );
-        assertViolationLine(check, 4);
+        assertIssueLine(check, 4);
     }
 
     @Test
@@ -138,7 +138,7 @@ public class OperationsInPredicateCheckTest extends AbstractSonarTest {
                 "fn:tokenize($name, '_')[1 to fn:last() - 1]"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
 
     @Test
@@ -150,7 +150,7 @@ public class OperationsInPredicateCheckTest extends AbstractSonarTest {
                 "/article[title eq getTitle()]"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
 
     @Test
@@ -162,7 +162,7 @@ public class OperationsInPredicateCheckTest extends AbstractSonarTest {
                 "/article[1 to $index mod $buffer]"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
 
     @Test
@@ -174,7 +174,7 @@ public class OperationsInPredicateCheckTest extends AbstractSonarTest {
                 "/article[1 to $index * $buffer]"
             )
         );
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
 
     @Test
@@ -192,7 +192,7 @@ public class OperationsInPredicateCheckTest extends AbstractSonarTest {
             ),
             2
         );
-        assertViolationLines(check, new int[] { 4, 5 });
+        assertIssueLines(check, new int[]{4, 5});
     }
 
     @Test
