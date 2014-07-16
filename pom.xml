@@ -9,7 +9,7 @@
     <groupId>org.codehaus.sonar-plugins.xquery</groupId>
     <artifactId>sonar-xquery-plugin</artifactId>
     <packaging>sonar-plugin</packaging>
-    <version>1.4</version>
+    <version>1.5</version>
     <name>Sonar XQuery Plugin</name>
     <description>Plugin for the Sonar Code Analysis Tool that analyzes XQuery code used in XQuery Applications</description>
 
@@ -17,7 +17,7 @@
         <dependency>
             <groupId>org.codehaus.sonar</groupId>
             <artifactId>sonar-plugin-api</artifactId>
-            <version>3.5</version>
+            <version>3.7</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
