@@ -7,7 +7,7 @@ package org.sonar.plugins.xquery.language;
 import org.sonar.api.design.Dependency;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
-import org.sonar.api.resources.Resource;
+import org.sonar.api.resources.File;
 
 import java.util.List;
 
@@ -27,9 +27,9 @@ public interface SourceCode {
 
     public void addMeasure(Metric metric, double value);
 
-    public void addDependency(Resource dependencyResource);
+    public void addDependency(File dependencyResource);
 
-    public Resource getResource();
+    public File getResource();
 
     public Measure getMeasure(Metric metric);
 

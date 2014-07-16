@@ -9,11 +9,10 @@ import org.apache.commons.lang.StringUtils;
 import org.sonar.api.design.Dependency;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
-import org.sonar.api.resources.InputFile;
-import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.SonarException;
 import org.sonar.squid.api.SourceCodeEdgeUsage;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,9 +20,9 @@ import java.util.List;
 
 public class XQuerySourceCode implements SourceCode {
 
+    private final File inputFile;
     private List<String> code = new ArrayList<String>();
-    private final InputFile file;
-    private final Resource resource;
+    private final org.sonar.api.resources.File resource;
     private final List<Measure> measures = new ArrayList<Measure>();
     private final List<Dependency> dependencies = new ArrayList<Dependency>();
 
@@ -38,10 +37,10 @@ public class XQuerySourceCode implements SourceCode {
         this(Arrays.asList(StringUtils.split(code, '\n')));
     }
 
-    public XQuerySourceCode(Resource resource, List<String> code) {
+    public XQuerySourceCode(org.sonar.api.resources.File resource, List<String> code, File inputFile) {
         this.code = code;
         this.resource = resource;
-        this.file = null;
+        this.inputFile = inputFile;
     }
 
     /**
@@ -52,12 +51,12 @@ public class XQuerySourceCode implements SourceCode {
      * @param code a list of strings code lines
      */
     public XQuerySourceCode(List<String> code) {
-        this(new XQueryFile("'" + StringUtils.join(code, "\n") + "'\n"), code);
+        this(org.sonar.api.resources.File.create("'" + StringUtils.join(code, "\n") + "'\n"), code, null);
     }
 
-    public XQuerySourceCode(Resource resource, InputFile file) {
+    public XQuerySourceCode(org.sonar.api.resources.File resource, File inputFile) {
         this.resource = resource;
-        this.file = file;
+        this.inputFile = inputFile;
     }
 
     @Override
@@ -67,9 +66,9 @@ public class XQuerySourceCode implements SourceCode {
 
     @Override
     public List<String> getCode() {
-        if (file != null && code.size() == 0) {
+        if (inputFile != null && code.size() == 0) {
             try {
-                code = FileUtils.readLines(file.getFile(), "UTF-8");
+                code = FileUtils.readLines(inputFile, "UTF-8");
                 return code;
             } catch (IOException e) {
                 throw new SonarException(e);
@@ -79,8 +78,7 @@ public class XQuerySourceCode implements SourceCode {
         }
     }
 
-    @Override
-    public Resource getResource() {
+    public org.sonar.api.resources.File getResource() {
         return resource;
     }
 
@@ -111,7 +109,7 @@ public class XQuerySourceCode implements SourceCode {
     }
 
     @Override
-    public void addDependency(Resource dependencyResource) {
+    public void addDependency(org.sonar.api.resources.File dependencyResource) {
         Dependency dependency = new Dependency(resource, dependencyResource);
         dependency.setUsage(SourceCodeEdgeUsage.USES.name());
         dependency.setWeight(1);

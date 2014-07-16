@@ -12,7 +12,6 @@ import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.xquery.checks.AbstractCheck;
 import org.sonar.plugins.xquery.language.Issue;
 import org.sonar.plugins.xquery.language.SourceCode;
-import org.sonar.plugins.xquery.language.XQueryFile;
 import org.sonar.plugins.xquery.language.XQuerySourceCode;
 import org.sonar.plugins.xquery.parser.XQueryTree;
 import org.sonar.plugins.xquery.parser.node.DependencyMapper;
@@ -33,14 +32,14 @@ import java.util.regex.Pattern;
 
 public class AnalyzeProject {
 
-    public static String CODE_ROOT = "/home/cieslinskice/Documents/Code/marklogic-extensions/performance";
+    public static String CODE_ROOT = "/Users/cieslinskice/Documents/Code/devpedia";
     public static File BASE_DIR = new File(CODE_ROOT);
     
     // Comma-delimited (no spaces) list of includes/excludes for the different phases
     public static String MAPPING_INCLUDES = "**/*.xqy";
     public static String MAPPING_EXCLUDES = "**/target/**";
-    public static String PROCESS_INCLUDES = "**/data/start-monitor.xqy";
-    public static String PROCESS_EXCLUDES = "**/target/**";
+    public static String PROCESS_INCLUDES = "**/*.xqy";
+    public static String PROCESS_EXCLUDES = "**/target/**,**/shared/**";
     
     // Regular expression of list of rules to evaluate (.* for all)
     public static String RULE_INCLUDES = "EffectiveBoolean.*";
@@ -83,7 +82,7 @@ public class AnalyzeProject {
         for (File file: (List<File>) FileUtils.getFiles(directory, MAPPING_INCLUDES, MAPPING_EXCLUDES)) {
             if (file.exists()) {
                 try {
-                    SourceCode sourceCode = new XQuerySourceCode(new XQueryFile(file.getAbsolutePath()), org.apache.commons.io.FileUtils.readLines(file, "UTF-8"));
+                    SourceCode sourceCode = new XQuerySourceCode(org.sonar.api.resources.File.create(file.getAbsolutePath()), file);
                     System.out.println("----- Mapping " + file.getAbsolutePath() + " -----");
                     FileUtils.fileAppend(outputFile, "\n----- Mapping " + file.getAbsolutePath() + " -----");
     
@@ -110,7 +109,7 @@ public class AnalyzeProject {
         for (File file:  (List<File>) FileUtils.getFiles(directory, PROCESS_INCLUDES, PROCESS_EXCLUDES)) {
             if (file.exists()) {    
                 try {
-                    SourceCode sourceCode = new XQuerySourceCode(new XQueryFile(file.getAbsolutePath()), org.apache.commons.io.FileUtils.readLines(file, "UTF-8"));
+                    SourceCode sourceCode = new XQuerySourceCode(org.sonar.api.resources.File.create(file.getAbsolutePath()), file);
                     System.out.println("----- Analyzing " + file.getAbsolutePath() + " -----");
                     FileUtils.fileAppend(outputFile, "\n----- Analyzing " + file.getAbsolutePath() + " -----");
     
