@@ -42,7 +42,7 @@ public class XQueryTestSensor implements Sensor {
 
     protected void collect(Project project, SensorContext context, File reportsDir) {
         LOGGER.info("parsing {}", reportsDir);
-        surefireXQueryParser.collect(project, context, reportsDir);
+        surefireXQueryParser.collect(context, reportsDir);
     }
 
     @Override

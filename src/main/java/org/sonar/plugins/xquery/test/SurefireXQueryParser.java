@@ -23,7 +23,6 @@
 
 package org.sonar.plugins.xquery.test;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
@@ -32,7 +31,6 @@ import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.config.Settings;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
-import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.test.MutableTestPlan;
 import org.sonar.api.test.TestCase;
@@ -61,7 +59,7 @@ public class SurefireXQueryParser implements BatchExtension {
         this.settings = settings;
     }
 
-    public void collect(Project project, SensorContext context, File reportsDir) {
+    public void collect(SensorContext context, File reportsDir) {
         File[] xmlFiles = getReports(reportsDir);
         if (xmlFiles.length > 0) {
             parseFiles(context, xmlFiles);
@@ -87,7 +85,7 @@ public class SurefireXQueryParser implements BatchExtension {
         return dir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return name.startsWith(fileNameStart) && name.endsWith(".xml");
+            return name.startsWith(fileNameStart) && name.endsWith(".xml");
             }
         });
     }
@@ -136,10 +134,10 @@ public class SurefireXQueryParser implements BatchExtension {
             double percentage = passedTests * 100d / testsCount;
             saveMeasure(context, resource, CoreMetrics.TEST_SUCCESS_DENSITY, ParsingUtils.scaleValue(percentage));
         }
-        saveResults(context, resource, report);
+        saveResults(resource, report);
     }
 
-    protected void saveResults(SensorContext context, Resource testFile, UnitTestClassReport report) {
+    protected void saveResults(Resource testFile, UnitTestClassReport report) {
         for (UnitTestResult unitTestResult : report.getResults()) {
             MutableTestPlan testPlan = perspectives.as(MutableTestPlan.class, testFile);
             if (testPlan != null) {
