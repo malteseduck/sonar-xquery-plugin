@@ -1,6 +1,7 @@
 /*
  * © 2014 by Intellectual Reserve, Inc. All rights reserved.
  */
+
 package org.sonar.plugins.xquery.parser;
 
 import org.antlr.runtime.CommonToken;
