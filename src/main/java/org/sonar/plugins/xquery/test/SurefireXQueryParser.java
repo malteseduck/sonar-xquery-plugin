@@ -7,7 +7,6 @@ package org.sonar.plugins.xquery.test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
-import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Resource;
 import org.sonar.plugins.surefire.api.AbstractSurefireParser;
@@ -16,11 +15,9 @@ import org.sonar.plugins.xquery.api.XQueryConstants;
 public class SurefireXQueryParser extends AbstractSurefireParser implements BatchExtension {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SurefireXQueryParser.class);
-    private final ResourcePerspectives perspectives;
     private final Settings settings;
 
-    public SurefireXQueryParser(ResourcePerspectives perspectives, Settings settings) {
-        this.perspectives = perspectives;
+    public SurefireXQueryParser(Settings settings) {
         this.settings = settings;
     }
 
