@@ -1,8 +1,9 @@
 Sonar XQuery Plugin
 ===================
 
-Language plugin for the Sonar code analysis tool (http://www.sonarqube.org/).  This has been
-tested on Sonar 3.5.
+Language plugin for the Sonar code analysis tool (http://www.sonarqube.org/).  This has been 
+tested on Sonar 4.3.  If you want a version that works with Sonar 3.5 then use version 1.4 
+of this plugin.
 
 Currently the XQuery parser is generated using ANTLR v3 and supports XQuery following
 the 1.0 specification.  There are some MarkLogic-specific additions to
@@ -19,15 +20,18 @@ Usage
 -----
 
 ###Sonar runner
-To build the plugin, run the unit tests, and start up a test instance of Sonar just run
-the following:
+To build the plugin and run the unit tests just run the following:
 ``` sh
-mvn install org.codehaus.sonar:sonar-dev-maven-plugin::start-war -Dsonar.runtimeVersion=3.5
+mvn install
 ```
 
-The simplest approach to run the analysis on a project is to use the runner (see
-http://docs.codehaus.org/display/SONAR/Analyzing+with+SonarQube+Runner).  Here is an example
-sonar-project.properties file I used for analyzing the xray library (86.2% compliance - good
+In order to run analysis on a project you will need to setup SonarQube 4.3 locally and install the built plugin
+into SONARQUBE_HOME/extensions/plugins.  Follow the setup instructions here (step 1.5 is install the plugin):
+
+``` http://docs.codehaus.org/display/SONAR/Setup+and+Upgrade ```
+
+The simplest approach to run the analysis on a project is to use the runner described in the setup guide.  Here is an 
+example sonar-project.properties file I used for analyzing the xray library (86.2% compliance - good
 work Rob :)):
 
 <pre>
@@ -49,11 +53,9 @@ sonar.language=xquery
 sonar.sourceEncoding=UTF-8
 </pre>
 
-With the runner installed just run "sonar-runner" from your project directory.
+With the runner installed just run the sonar runner from your project directory.
 
-To run this in a "production" instance of Sonar just copy the built JAR file into
-into the SONARQUBE_HOME/extensions/plugins directory.  To see more details of how to
-run analysis on projects using maven, gradle, etc. see the documentation on the SonarQube
+To see more details of how to run analysis on projects using maven, gradle, etc. see the documentation on the SonarQube
 site:
 
 http://docs.codehaus.org/display/SONAR/Analyzing+Source+Code

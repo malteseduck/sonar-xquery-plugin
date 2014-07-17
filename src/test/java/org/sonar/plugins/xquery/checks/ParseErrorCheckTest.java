@@ -1,5 +1,5 @@
 /*
- * © 2013 by Intellectual Reserve, Inc. All rights reserved.
+ * © 2014 by Intellectual Reserve, Inc. All rights reserved.
  */
 
 package org.sonar.plugins.xquery.checks;
@@ -26,7 +26,7 @@ public class ParseErrorCheckTest extends AbstractSonarTest {
             )
         );
         setReporter(null);
-        assertViolationLine(check, 2);
+        assertIssueLine(check, 2);
     }
 
     @Test

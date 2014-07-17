@@ -1,5 +1,5 @@
 /*
- * © 2013 by Intellectual Reserve, Inc. All rights reserved.
+ * © 2014 by Intellectual Reserve, Inc. All rights reserved.
  */
 
 package org.sonar.plugins.xquery.rules;
@@ -10,6 +10,7 @@ import org.sonar.api.rules.AnnotationRuleParser;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.xquery.api.XQueryConstants;
+import org.sonar.api.profiles.AnnotationProfileParser;
 
 import java.util.List;
 
@@ -20,17 +21,14 @@ import java.util.List;
  */
 public final class XQueryProfile extends ProfileDefinition {
 
-	@Override
-	public RulesProfile createProfile(ValidationMessages validation) {
-		RulesProfile rulesProfile = RulesProfile.create("Default Profile", XQueryConstants.XQUERY_LANGUAGE_KEY);
-		
-		// Add the default rules to the profile
-		List<Rule> rules = new XQueryRulesRepository(new AnnotationRuleParser()).createDefaultRules();
-		for (Rule rule : rules) {
-			rulesProfile.activateRule(rule, rule.getSeverity());
-		}
-		
-		rulesProfile.setDefaultProfile(true);
-		return rulesProfile;
-	}
+    private final AnnotationProfileParser annotationProfileParser;
+
+    public XQueryProfile(AnnotationProfileParser annotationProfileParser) {
+        this.annotationProfileParser = annotationProfileParser;
+    }
+
+    @Override
+    public RulesProfile createProfile(ValidationMessages messages) {
+        return annotationProfileParser.parse(CheckClasses.REPOSITORY_KEY, "Default Profile", XQueryConstants.XQUERY_LANGUAGE_KEY, CheckClasses.getChecks(), messages);
+    }
 }

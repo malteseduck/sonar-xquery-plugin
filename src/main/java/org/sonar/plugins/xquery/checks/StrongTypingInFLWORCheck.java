@@ -1,13 +1,15 @@
 /*
- * © 2013 by Intellectual Reserve, Inc. All rights reserved.
+ * © 2014 by Intellectual Reserve, Inc. All rights reserved.
  */
 
 package org.sonar.plugins.xquery.checks;
 
+import org.sonar.api.rule.RuleKey;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.xquery.parser.XQueryParser;
 import org.sonar.plugins.xquery.parser.XQueryTree;
+import org.sonar.plugins.xquery.rules.CheckClasses;
 
 /**
  * Checks for strong typing in module variable declarations
@@ -15,7 +17,7 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
  * @since 1.0
  */
 @Rule(
-    key = "StrongTypingInFLWOR",
+    key = StrongTypingInFLWORCheck.RULE_KEY,
     name = "Use Strong Typing FLWOR Expressions",
     description = "Declare types for FLWOR 'let' and 'for' clauses to increase readability and catch potential bugs. " +
             "Also try to scope the types as narrowly as possible " +
@@ -24,6 +26,9 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
     priority = Priority.MINOR
 )
 public class StrongTypingInFLWORCheck extends AbstractCheck {
+
+    public static final String RULE_KEY = "StrongTypingInFLWOR";
+    private static final RuleKey RULE = RuleKey.of(CheckClasses.REPOSITORY_KEY, RULE_KEY);
 
     @Override
     public void enterExpression(XQueryTree node) {
@@ -40,14 +45,14 @@ public class StrongTypingInFLWORCheck extends AbstractCheck {
                     // Check any 'for' clauses
                     if ("ForClause".equals(clause.getText())) {
                         if (clause.find("ForType") == null) {
-                            createViolation(clause.getLine());
+                            createIssue(RULE, clause.getLine());
                         }
                     }
 
                     // Check any 'let' clauses
                     if ("LetClause".equals(clause.getText())) {
                         if (clause.find("LetType") == null) {
-                            createViolation(clause.getLine());
+                            createIssue(RULE, clause.getLine());
                         }
                     }
                 }

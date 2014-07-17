@@ -1,5 +1,5 @@
 /*
- * © 2013 by Intellectual Reserve, Inc. All rights reserved.
+ * © 2014 by Intellectual Reserve, Inc. All rights reserved.
  */
 
 package org.sonar.plugins.xquery.checks;
@@ -20,7 +20,7 @@ public class XQueryVersionCheckTest extends AbstractSonarTest {
                 "fn:current-dateTime()"
             )
         );
-        assertViolationLine(check, 1);
+        assertIssueLine(check, 1);
 	}
 
     @Test
@@ -34,7 +34,7 @@ public class XQueryVersionCheckTest extends AbstractSonarTest {
             ),
             2
         );
-        assertViolationLines(check, new int[] {1, 3});
+        assertIssueLines(check, new int[]{1, 3});
     }	
 	
 	@Test
@@ -45,7 +45,7 @@ public class XQueryVersionCheckTest extends AbstractSonarTest {
                 "fn:current-dateTime()"
             )
         );
-        assertViolationLine(check, 1);
+        assertIssueLine(check, 1);
     }
 
     @Test

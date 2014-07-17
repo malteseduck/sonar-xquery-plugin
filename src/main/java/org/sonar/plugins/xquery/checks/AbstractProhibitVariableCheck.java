@@ -1,5 +1,5 @@
 /*
- * © 2013 by Intellectual Reserve, Inc. All rights reserved.
+ * © 2014 by Intellectual Reserve, Inc. All rights reserved.
  */
 
 package org.sonar.plugins.xquery.checks;
@@ -25,10 +25,12 @@ public abstract class AbstractProhibitVariableCheck extends AbstractCheck {
            case XQueryParser.LetName:
         	   String name = node.getValue("QName");
         	   if (!StringUtils.isBlank(name) && Pattern.matches(getPattern(), name)) {
-        		   createViolation(node.getLine());
+        		   createIssue(node.getLine());
         	   }
         	   break;
         }
     }
+
+    abstract protected void createIssue(int lineNumber);
     abstract protected String getPattern();
 }

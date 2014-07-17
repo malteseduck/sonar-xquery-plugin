@@ -1,5 +1,5 @@
 /*
- * © 2013 by Intellectual Reserve, Inc. All rights reserved.
+ * © 2014 by Intellectual Reserve, Inc. All rights reserved.
  */
 
 package org.sonar.plugins.xquery.checks;
@@ -21,7 +21,7 @@ public class FunctionMappingCheckTest extends AbstractSonarTest {
                 "return $test"
             )
         );
-        assertViolationLine(check, 1);
+        assertIssueLine(check, 1);
     }
 
     @Test
@@ -39,7 +39,7 @@ public class FunctionMappingCheckTest extends AbstractSonarTest {
             ),
             2
         );
-        assertViolationLines(check, new int[] {1, 5});
+        assertIssueLines(check, new int[]{1, 5});
     }    
     
     @Test

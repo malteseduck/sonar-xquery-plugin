@@ -1,5 +1,5 @@
 /*
- * © 2013 by Intellectual Reserve, Inc. All rights reserved.
+ * © 2014 by Intellectual Reserve, Inc. All rights reserved.
  */
 
 package org.sonar.plugins.xquery.parser.visitor;
@@ -50,9 +50,7 @@ public class XQueryAstParser {
 
     /**
      * Do a quick pass and map the global declarations for the specified tree
-     * 
-     * @param tree
-     * @param mapper
+     *
      */
     public void mapDependencies(XQueryTree tree, DependencyMapper mapper) {
         // Since the mapper doesn't use any of the parameters, just pass in

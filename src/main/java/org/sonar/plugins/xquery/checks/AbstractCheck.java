@@ -1,11 +1,11 @@
 /*
- * © 2013 by Intellectual Reserve, Inc. All rights reserved.
+ * © 2014 by Intellectual Reserve, Inc. All rights reserved.
  */
 
 package org.sonar.plugins.xquery.checks;
 
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.Violation;
+import org.sonar.api.rule.RuleKey;
+import org.sonar.plugins.xquery.language.Issue;
 import org.sonar.plugins.xquery.language.SourceCode;
 import org.sonar.plugins.xquery.parser.XQueryTree;
 import org.sonar.plugins.xquery.parser.node.DependencyMapper;
@@ -13,8 +13,6 @@ import org.sonar.plugins.xquery.parser.reporter.ProblemReporter;
 import org.sonar.plugins.xquery.parser.visitor.XQueryAstVisitor;
 
 public abstract class AbstractCheck implements XQueryAstVisitor {
-
-    private Rule rule;
 
     private SourceCode sourceCode;
 
@@ -26,16 +24,13 @@ public abstract class AbstractCheck implements XQueryAstVisitor {
         // By default do nothing
     }
 
-    protected final void createViolation(int lineNumber) {
-        createViolation(lineNumber, rule.getDescription());
+    protected final void createIssue(RuleKey rule, int lineNumber) {
+        createIssue(rule, lineNumber, rule.rule());
     }
 
-    protected final void createViolation(int lineNumber, String message) {
-        if (getViolation(lineNumber) == null) {
-            Violation violation = Violation.create(rule, getSourceCode().getResource());
-            violation.setMessage(message);
-            violation.setLineId(lineNumber);
-            getSourceCode().addViolation(violation);
+    protected final void createIssue(RuleKey rule, int lineNumber, String message) {
+        if (getIssue(rule, lineNumber) == null) {
+            getSourceCode().addIssue(new Issue(rule, lineNumber, message));
         }
     }
 
@@ -73,14 +68,12 @@ public abstract class AbstractCheck implements XQueryAstVisitor {
         return mapper;
     }
 
-    public SourceCode getSourceCode() {
-        return sourceCode;
-    }
+    public SourceCode getSourceCode() { return sourceCode; }
 
-    public Violation getViolation(int lineNumber) {
-        for (Violation violation : getSourceCode().getViolations()) {
-            if (violation.getRule() == rule && violation.getLineId() == lineNumber) {
-                return violation;
+    public Issue getIssue(RuleKey rule, int lineNumber) {
+        for (Issue issue : getSourceCode().getIssues()) {
+            if (issue.rule() == rule && issue.line() == lineNumber) {
+                return issue;
             }
         }
         return null;
@@ -98,11 +91,5 @@ public abstract class AbstractCheck implements XQueryAstVisitor {
         this.mapper = mapper;
     }
 
-    public final void setRule(Rule rule) {
-        this.rule = rule;
-    }
-
-    public void setSourceCode(SourceCode sourceCode) {
-        this.sourceCode = sourceCode;
-    }
+    public void setSourceCode(SourceCode sourceCode) { this.sourceCode = sourceCode; }
 }

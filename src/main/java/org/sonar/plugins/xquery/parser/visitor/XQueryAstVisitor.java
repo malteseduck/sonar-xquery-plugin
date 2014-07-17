@@ -1,9 +1,10 @@
 /*
- * © 2013 by Intellectual Reserve, Inc. All rights reserved.
+ * © 2014 by Intellectual Reserve, Inc. All rights reserved.
  */
 
 package org.sonar.plugins.xquery.parser.visitor;
 
+import org.sonar.api.issue.Issuable;
 import org.sonar.plugins.xquery.language.SourceCode;
 import org.sonar.plugins.xquery.parser.XQueryTree;
 import org.sonar.plugins.xquery.parser.node.DependencyMapper;

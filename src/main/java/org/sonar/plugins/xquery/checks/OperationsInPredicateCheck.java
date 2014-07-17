@@ -1,14 +1,16 @@
 /*
- * © 2013 by Intellectual Reserve, Inc. All rights reserved.
+ * © 2014 by Intellectual Reserve, Inc. All rights reserved.
  */
 
 package org.sonar.plugins.xquery.checks;
 
 import org.apache.commons.lang.StringUtils;
+import org.sonar.api.rule.RuleKey;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.xquery.parser.XQueryParser;
 import org.sonar.plugins.xquery.parser.XQueryTree;
+import org.sonar.plugins.xquery.rules.CheckClasses;
 
 /**
  * Checks for usage of text() XPath steps.
@@ -16,7 +18,7 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
  * @since 1.0
  */
 @Rule(
-    key = "OperationsInPredicate",
+    key = OperationsInPredicateCheck.RULE_KEY,
     name = "Avoid Operations in Predicates",
     description = "Instead of calling functions or performing operations in predicates " +
             "try assigning the results to a variable before the predicate.",
@@ -25,7 +27,10 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
 public class OperationsInPredicateCheck extends AbstractPredicateCheck {
     // TODO: Either create a new check for or add to this checks for operations in xdmp:directory()
     // TODO: Support for fn:local-name(), fn:name(), fn:node-name()?
-    
+
+    public static final String RULE_KEY = "OperationsInPredicate";
+    private static final RuleKey RULE = RuleKey.of(CheckClasses.REPOSITORY_KEY, RULE_KEY);
+
     private static final String[] FUNCTIONS = new String[] { "data", "last", "not", "exists", "xs:integer", "string", "xs:decimal", "xs:double", "xs:float", "xs:date", "xs:dateTime", "xs:time", "xs:dayTimeDuration", "xs:yearMonthDuration", "xs:duration" };
     private static final String[] EXPRESSIONS = new String[] { "UnaryExpr +", "UnaryExpr -", "UnaryExpr div", "UnaryExpr *", "UnaryExpr mod" };    
 
@@ -41,7 +46,7 @@ public class OperationsInPredicateCheck extends AbstractPredicateCheck {
             String value = node.getValue();
             for (String expression : EXPRESSIONS) {
                 if (StringUtils.contains(value, expression)) { 
-                    createViolation(node.getLine());
+                    createIssue(RULE, node.getLine());
                 }
             }        
         }        
@@ -60,7 +65,7 @@ public class OperationsInPredicateCheck extends AbstractPredicateCheck {
             
             // If the function call is not "valid" then create a violation
             if (!valid) {
-                createViolation(node.getLine());
+                createIssue(RULE, node.getLine());
             }
         
         } 

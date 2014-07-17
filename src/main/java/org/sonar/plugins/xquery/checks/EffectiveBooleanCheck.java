@@ -1,16 +1,18 @@
 /*
- * © 2013 by Intellectual Reserve, Inc. All rights reserved.
+ * © 2014 by Intellectual Reserve, Inc. All rights reserved.
  */
 
 package org.sonar.plugins.xquery.checks;
 
 import org.apache.commons.lang.StringUtils;
+import org.sonar.api.rule.RuleKey;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.xquery.parser.XQueryParser;
 import org.sonar.plugins.xquery.parser.XQueryTree;
 import org.sonar.plugins.xquery.parser.node.Declaration;
 import org.sonar.plugins.xquery.parser.node.Function;
+import org.sonar.plugins.xquery.rules.CheckClasses;
 
 /**
  * Checks for reliance on effective boolean values in conditionals.
@@ -18,13 +20,16 @@ import org.sonar.plugins.xquery.parser.node.Function;
  * @since 1.0
  */
 @Rule(
-    key = "EffectiveBoolean",
+    key = EffectiveBooleanCheck.RULE_KEY,
     name = "Effective Boolean in Conditional Predicate",
     description = "Unless the value in the conditional is of type xs:boolean it is recommended you use " +
             "fn:exists(), fn:empty(), or other boolean functions inside of conditional predicates to check values.",
     priority = Priority.MINOR
 )
 public class EffectiveBooleanCheck extends AbstractCheck {
+
+    public static final String RULE_KEY = "EffectiveBoolean";
+    private static final RuleKey RULE = RuleKey.of(CheckClasses.REPOSITORY_KEY, RULE_KEY);
 
     private static final String[] FUNCTIONS = new String[] { "exists", "empty", "contains", "starts-with", "ends-with", "boolean", "not", "true", "false", "matches" };
     private static final String[] EXPRESSIONS = new String[] { "UnaryExpr =", "UnaryExpr eq", "UnaryExpr !=", "UnaryExpr ne", "UnaryExpr <", "UnaryExpr lt", "UnaryExpr <=", "UnaryExpr le", "UnaryExpr >", "UnaryExpr gt", "UnaryExpr >=", "UnaryExpr ge", "UnaryExpr castable as", "UnaryExpr instance of" };
@@ -75,7 +80,7 @@ public class EffectiveBooleanCheck extends AbstractCheck {
             }
 
             if (!valid) {
-                createViolation(node.getLine());
+                createIssue(RULE, node.getLine());
             }
         }
     }

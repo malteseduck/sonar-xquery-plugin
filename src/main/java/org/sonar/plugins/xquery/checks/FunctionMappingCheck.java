@@ -1,13 +1,15 @@
 /*
- * © 2013 by Intellectual Reserve, Inc. All rights reserved.
+ * © 2014 by Intellectual Reserve, Inc. All rights reserved.
  */
 
 package org.sonar.plugins.xquery.checks;
 
+import org.sonar.api.rule.RuleKey;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.plugins.xquery.parser.XQueryParser;
 import org.sonar.plugins.xquery.parser.XQueryTree;
+import org.sonar.plugins.xquery.rules.CheckClasses;
 
 /**
  * Checks for function mapping usage
@@ -15,7 +17,7 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
  * @since 1.0
  */
 @Rule(
-	key = "FunctionMapping",
+	key = FunctionMappingCheck.RULE_KEY,
 	name = "Function Mapping Usage (Marklogic)",
 	description = "Make sure you are intentionally using and/or understand function mapping " +
             "- otherwise disable it with 'declare option xdmp:mapping \"false\";'. " +
@@ -25,7 +27,10 @@ import org.sonar.plugins.xquery.parser.XQueryTree;
 	priority = Priority.MAJOR
 )
 public class FunctionMappingCheck extends AbstractCheck {
-	
+
+    public static final String RULE_KEY = "FunctionMapping";
+    private static final RuleKey RULE = RuleKey.of(CheckClasses.REPOSITORY_KEY, RULE_KEY);
+
     private boolean capable = false;
     private boolean used = false;
 
@@ -62,7 +67,7 @@ public class FunctionMappingCheck extends AbstractCheck {
         // violation if the flags are not correct
         if (XQueryParser.MainModule == node.getType() || XQueryParser.LibraryModule == node.getType()) {
             if (capable && !used) {
-                createViolation(getLine());
+                createIssue(RULE, getLine());
             }
         }
     }    

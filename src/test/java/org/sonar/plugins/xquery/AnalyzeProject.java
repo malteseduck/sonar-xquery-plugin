@@ -1,50 +1,19 @@
 /*
- * © 2013 by Intellectual Reserve, Inc. All rights reserved.
+ * © 2014 by Intellectual Reserve, Inc. All rights reserved.
  */
 
 package org.sonar.plugins.xquery;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.antlr.runtime.ANTLRFileStream;
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.TokenStream;
-import org.antlr.runtime.debug.ParseTreeBuilder;
-import org.antlr.runtime.debug.XQueryParseTreeBuilder;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang.StringUtils;
 import org.codehaus.plexus.util.FileUtils;
-import org.sonar.api.resources.InputFile;
-import org.sonar.api.resources.InputFileUtils;
-import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.api.resources.Resource;
-import org.sonar.api.rules.ActiveRule;
-import org.sonar.api.rules.ActiveRuleParam;
 import org.sonar.api.rules.AnnotationRuleParser;
 import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.Violation;
 import org.sonar.api.utils.AnnotationUtils;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.xquery.api.XQueryConstants;
 import org.sonar.plugins.xquery.checks.AbstractCheck;
+import org.sonar.plugins.xquery.language.Issue;
 import org.sonar.plugins.xquery.language.SourceCode;
-import org.sonar.plugins.xquery.language.XQueryFile;
-import org.sonar.plugins.xquery.language.XQueryLineCountParser;
 import org.sonar.plugins.xquery.language.XQuerySourceCode;
-import org.sonar.plugins.xquery.parser.LazyTokenStream;
-import org.sonar.plugins.xquery.parser.XQueryLexer;
-import org.sonar.plugins.xquery.parser.XQueryParser;
 import org.sonar.plugins.xquery.parser.XQueryTree;
-import org.sonar.plugins.xquery.parser.XQueryTreeAdaptor;
 import org.sonar.plugins.xquery.parser.node.DependencyMapper;
 import org.sonar.plugins.xquery.parser.reporter.ProblemReporter;
 import org.sonar.plugins.xquery.parser.visitor.XQueryAstParser;
@@ -52,16 +21,25 @@ import org.sonar.plugins.xquery.parser.visitor.XQueryAstVisitor;
 import org.sonar.plugins.xquery.rules.CheckClasses;
 import org.sonar.plugins.xquery.rules.XQueryRulesRepository;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class AnalyzeProject {
 
-    public static String CODE_ROOT = "/home/cieslinskice/Documents/Code/marklogic-extensions/performance";
+    public static String CODE_ROOT = "/Users/cieslinskice/Documents/Code/devpedia";
     public static File BASE_DIR = new File(CODE_ROOT);
     
     // Comma-delimited (no spaces) list of includes/excludes for the different phases
     public static String MAPPING_INCLUDES = "**/*.xqy";
     public static String MAPPING_EXCLUDES = "**/target/**";
-    public static String PROCESS_INCLUDES = "**/data/start-monitor.xqy";
-    public static String PROCESS_EXCLUDES = "**/target/**";
+    public static String PROCESS_INCLUDES = "**/*.xqy";
+    public static String PROCESS_EXCLUDES = "**/target/**,**/shared/**";
     
     // Regular expression of list of rules to evaluate (.* for all)
     public static String RULE_INCLUDES = "EffectiveBoolean.*";
@@ -104,7 +82,7 @@ public class AnalyzeProject {
         for (File file: (List<File>) FileUtils.getFiles(directory, MAPPING_INCLUDES, MAPPING_EXCLUDES)) {
             if (file.exists()) {
                 try {
-                    SourceCode sourceCode = new XQuerySourceCode(new XQueryFile(file.getAbsolutePath()), org.apache.commons.io.FileUtils.readLines(file, "UTF-8"));
+                    SourceCode sourceCode = new XQuerySourceCode(org.sonar.api.resources.File.create(file.getAbsolutePath()), file);
                     System.out.println("----- Mapping " + file.getAbsolutePath() + " -----");
                     FileUtils.fileAppend(outputFile, "\n----- Mapping " + file.getAbsolutePath() + " -----");
     
@@ -131,19 +109,19 @@ public class AnalyzeProject {
         for (File file:  (List<File>) FileUtils.getFiles(directory, PROCESS_INCLUDES, PROCESS_EXCLUDES)) {
             if (file.exists()) {    
                 try {
-                    SourceCode sourceCode = new XQuerySourceCode(new XQueryFile(file.getAbsolutePath()), org.apache.commons.io.FileUtils.readLines(file, "UTF-8"));
+                    SourceCode sourceCode = new XQuerySourceCode(org.sonar.api.resources.File.create(file.getAbsolutePath()), file);
                     System.out.println("----- Analyzing " + file.getAbsolutePath() + " -----");
                     FileUtils.fileAppend(outputFile, "\n----- Analyzing " + file.getAbsolutePath() + " -----");
     
                     ProblemReporter reporter = new ProblemReporter();
-                    XQueryAstParser parser = new XQueryAstParser(sourceCode, visitors);                    
+                    XQueryAstParser parser = new XQueryAstParser(sourceCode, visitors);
                     XQueryTree tree = parser.parse(reporter);
                     parser.process(tree, mapper, reporter);
     
                     // Output the violations
-                    for (Violation violation : sourceCode.getViolations()) {
-                        System.out.println("      - " + violation.getRule().getSeverity() + " Violation on line " + violation.getLineId() + ": " + violation.getRule().getName());
-                        FileUtils.fileAppend(outputFile, "\n      - " + violation.getRule().getSeverity() + " Violation on line " + violation.getLineId() + ": " + violation.getRule().getName());
+                    for (Issue issue : sourceCode.getIssues()) {
+                        System.out.println("      - Violation on line " + issue.line() + ": " + issue.rule());
+                        FileUtils.fileAppend(outputFile, "\n      - Violation on line " + issue.line() + ": " + issue.rule());
                     }
                 } catch (Exception e) {
                     System.out.println("Could not analyze the file " + file.getAbsolutePath());
@@ -159,7 +137,7 @@ public class AnalyzeProject {
     }
     
     private static Class<AbstractCheck> getCheckClass(Rule rule) {
-        for (Class<?> checkClass : CheckClasses.getCheckClasses()) {
+        for (Class<?> checkClass : CheckClasses.getChecks()) {
 
             org.sonar.check.Rule ruleAnnotation = AnnotationUtils.getClassAnnotation(checkClass, org.sonar.check.Rule.class);
             if (ruleAnnotation.key().equals(rule.getConfigKey())) {
@@ -174,7 +152,6 @@ public class AnalyzeProject {
 
         try {
             AbstractCheck check = checkClass.newInstance();
-            check.setRule(rule);
             return check;
         } catch (IllegalAccessException e) {
             throw new SonarException(e);

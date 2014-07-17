@@ -1,5 +1,5 @@
 /*
- * © 2013 by Intellectual Reserve, Inc. All rights reserved.
+ * © 2014 by Intellectual Reserve, Inc. All rights reserved.
  */
 
 package org.sonar.plugins.xquery.language;
@@ -7,8 +7,7 @@ package org.sonar.plugins.xquery.language;
 import org.sonar.api.design.Dependency;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.measures.Metric;
-import org.sonar.api.resources.Resource;
-import org.sonar.api.rules.Violation;
+import org.sonar.api.resources.File;
 
 import java.util.List;
 
@@ -18,19 +17,19 @@ public interface SourceCode {
 
     public List<String> getCode();
 
-    public List<Violation> getViolations();
+    public List<Issue> getIssues();
 
     public List<Dependency> getDependencies();
 
     public List<Measure> getMeasures();
 
-    public void addViolation(Violation violation);
+    public void addIssue(Issue issue);
 
     public void addMeasure(Metric metric, double value);
 
-    public void addDependency(Resource<?> dependencyResource);
+    public void addDependency(File dependencyResource);
 
-    public Resource<?> getResource();
+    public File getResource();
 
     public Measure getMeasure(Metric metric);
 
