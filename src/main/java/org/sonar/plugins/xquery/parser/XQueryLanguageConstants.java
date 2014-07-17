@@ -1,3 +1,7 @@
+/*
+ * © 2014 by Intellectual Reserve, Inc. All rights reserved.
+ */
+
 /*******************************************************************************
  * Copyright (c) 2008, 2009 28msec Inc. and others.
  * All rights reserved. This program and the accompanying materials

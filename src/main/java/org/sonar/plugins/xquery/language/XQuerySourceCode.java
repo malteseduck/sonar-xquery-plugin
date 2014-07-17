@@ -1,4 +1,8 @@
 /*
+ * © 2014 by Intellectual Reserve, Inc. All rights reserved.
+ */
+
+/*
  * (c) 2014 by Intellectual Reserve, Inc. All rights reserved.
  */
 
