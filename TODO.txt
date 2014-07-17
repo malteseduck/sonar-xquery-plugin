@@ -13,5 +13,3 @@ Sonar XQuery Plugin TODO List
 - More unit tests / unit tests for Sonar functionality?
 
 - Add maven plugin(?) to output results on command line
-
-- Upgrade to follow SonarQube conventions and work with Sonar 3.7

@@ -20,8 +20,6 @@
     </properties>
 
     <dependencies>
-
-
         <dependency>
             <groupId>org.codehaus.sonar</groupId>
             <artifactId>sonar-plugin-api</artifactId>
