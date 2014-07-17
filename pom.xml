@@ -41,10 +41,10 @@
         </dependency>
 
         <dependency>
-            <groupId>org.codehaus.sonar.plugins</groupId>
+            <groupId>org.codehaus.sonar-plugins.java</groupId>
             <artifactId>sonar-surefire-plugin</artifactId>
-            <version>3.3.2</version>
-            <scope>provided</scope>
+            <version>2.1</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.plexus</groupId>

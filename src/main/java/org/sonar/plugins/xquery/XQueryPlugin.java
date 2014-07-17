@@ -14,6 +14,7 @@ import org.sonar.plugins.xquery.language.XQueryCodeColorizerFormat;
 import org.sonar.plugins.xquery.language.XQuerySourceImporter;
 import org.sonar.plugins.xquery.rules.XQueryProfile;
 import org.sonar.plugins.xquery.rules.XQueryRulesRepository;
+import org.sonar.plugins.xquery.test.SurefireXQueryParser;
 import org.sonar.plugins.xquery.test.XQueryTestSensor;
 
 import java.util.List;
@@ -53,10 +54,12 @@ public class XQueryPlugin extends SonarPlugin {
 
             // XQuery sensors
             XQuerySensor.class,
-            XQueryTestSensor.class
+            XQueryTestSensor.class,
+
+            // XQuery Test parser
+            SurefireXQueryParser.class
         );
     }
-
 
     @Override
     public String toString() {
