@@ -2,7 +2,7 @@ Sonar XQuery Plugin
 ===================
 
 Language plugin for the Sonar code analysis tool (http://www.sonarqube.org/).  This has been 
-tested on Sonar 4.3.  If you want a version that works with Sonar 3.5 then use version 1.4 
+tested on Sonar 4.3.  If you want a version that works with Sonar 3.5 then use version [1.5](https://github.com/malteseduck/sonar-xquery-plugin/releases/tag/1.5) 
 of this plugin.
 
 Currently the XQuery parser is generated using ANTLR v3 and supports XQuery following
@@ -28,7 +28,7 @@ mvn install
 In order to run analysis on a project you will need to setup SonarQube 4.3 locally and install the built plugin
 into SONARQUBE_HOME/extensions/plugins.  Follow the setup instructions here (step 1.5 is install the plugin):
 
-``` http://docs.codehaus.org/display/SONAR/Setup+and+Upgrade ```
+[http://docs.codehaus.org/display/SONAR/Setup+and+Upgrade](http://docs.codehaus.org/display/SONAR/Setup+and+Upgrade)
 
 The simplest approach to run the analysis on a project is to use the runner described in the setup guide.  Here is an 
 example sonar-project.properties file I used for analyzing the xray library (86.2% compliance - good
@@ -58,7 +58,7 @@ With the runner installed just run the sonar runner from your project directory.
 To see more details of how to run analysis on projects using maven, gradle, etc. see the documentation on the SonarQube
 site:
 
-http://docs.codehaus.org/display/SONAR/Analyzing+Source+Code
+[http://docs.codehaus.org/display/SONAR/Analyzing+Source+Code](http://docs.codehaus.org/display/SONAR/Analyzing+Source+Code)
 
 ###Maven
 To prepare an example maven project that hosts both java and source code
