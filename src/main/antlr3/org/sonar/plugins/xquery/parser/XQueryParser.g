@@ -713,12 +713,23 @@ p_AndExpr
         ;
 
 //[84]
-//[50] Full Text 1.0
-p_ComparisonExpr
-        : p_FTContainsExpr ( (p_ValueComp | p_GeneralComp | p_NodeComp) p_FTContainsExpr )?
-        ;
+//p_ComparisonExpr
+//        : p_FTContainsExpr ( (p_ValueComp | p_GeneralComp | p_NodeComp) p_FTContainsExpr )?
+//        ;
 
-//[85]
+
+//[85] (3.0)
+p_ComparisonExpr
+          : p_StringConcatExpr ( (p_ValueComp | p_GeneralComp | p_NodeComp) p_StringConcatExpr )?
+          ;
+
+//[86] (3.0)
+//[50] Full Text 1.0?
+p_StringConcatExpr
+          : p_FTContainsExpr ( DOUBLE_VBAR p_FTContainsExpr )*
+          ;
+
+//[87] (3.0)
 p_RangeExpr
         : p_AdditiveExpr ( k=TO {ak($k);} p_AdditiveExpr )?
         ;

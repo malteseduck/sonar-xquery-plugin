@@ -310,6 +310,7 @@ EMPTY_CLOSE_TAG         : '/>';
 CLOSE_TAG               : '</';
 SEMICOLON               : ';' ;
 VBAR                    : '|';
+DOUBLE_VBAR             : '||';
 PRAGMA_START            : '(#';
 PRAGMA_END              : '#)';
 XML_COMMENT_START       : '<!--';

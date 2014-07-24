@@ -751,8 +751,38 @@ public class XQueryParserTest extends AbstractSonarTest {
         
         Assert.assertEquals(predicates.getValue("Predicate.QName"), "publication", "First predicate variable name");
         Assert.assertEquals(predicates.getValue("Predicate.StringLiteral"), "Ensign", "First predicate string");
-    }         
-    
+    }
+
+    @Test
+    public void testDoubleVbar() throws RecognitionException {
+        log("testDoubleVbar():");
+        XQueryTree tree = parse(
+            code(
+                "xquery version '1.0-ml';",
+                "'hello' || ' world'"
+            )
+        );
+
+        XQueryTree queryBody = tree.find("QueryBody");
+        Assert.assertNotNull(queryBody, "Query body");
+        Assert.assertEquals(queryBody.getValue(), "UnaryExpr || UnaryExpr");
+    }
+
+    @Test
+    public void testDoubleVbarInFunctionCall() throws RecognitionException {
+        log("testDoubleVbarInFunctionCall():");
+        XQueryTree tree = parse(
+            code(
+                "xquery version '1.0-ml';",
+                "xdmp:log('hello' || ' world')"
+            )
+        );
+
+        XQueryTree functionCall = tree.find("FunctionCall");
+        Assert.assertNotNull(functionCall, "Function call");
+        Assert.assertEquals(functionCall.getTextValue("ArgumentList.Argument"), "UnaryExpr||UnaryExpr");
+    }
+
     @Test
     public void testPrivateVariable() throws RecognitionException {
         log("testPrivateVariable():");
