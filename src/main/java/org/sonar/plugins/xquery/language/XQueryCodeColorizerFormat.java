@@ -45,24 +45,24 @@ public class XQueryCodeColorizerFormat extends CodeColorizerFormat {
 		String tagAfter = "</span>";
 		
 		// Keywords and types
-		tokenizers.add(new KeywordsTokenizer("<span style=\"color: #0000FA\">", tagAfter, KEYWORDS));
+		tokenizers.add(new KeywordsTokenizer("<span class=\"k\">", tagAfter, KEYWORDS));
 		tokenizers.add(new KeywordsTokenizer("<span class=\"j\">", tagAfter, TYPES));
 		
         // Comments
-        tokenizers.add(new RegexpTokenizer("<span style=\"color: #008C00\">", tagAfter, "\\(:.*(:\\))?"));
+        tokenizers.add(new RegexpTokenizer("<span class=\"cd\">", tagAfter, "\\(:.*(:\\))?"));
         
         // XML tags
-		tokenizers.add(new RegexpTokenizer("<span style=\"color: #000096\">", tagAfter, "</?\\p{L}*>?"));
-        tokenizers.add(new RegexpTokenizer("<span style=\"color: #000096\">", tagAfter, ">"));
+		tokenizers.add(new RegexpTokenizer("<span class=\"c\">", tagAfter, "</?\\p{L}*>?"));
+        tokenizers.add(new RegexpTokenizer("<span class=\"c\">", tagAfter, ">"));
 
         // XML attributes
-        tokenizers.add(new RegexpTokenizer("<span style=\"color: #F5844C\">", tagAfter, "\\w+\\s*=\\s*\".*?\""));
+        tokenizers.add(new RegexpTokenizer("<span class=\"a\">", tagAfter, "\\w+\\s*=\\s*\".*?\""));
 
         // Function calls
 //        tokenizers.add(new RegexpTokenizer("<span style=\"color: #FA6400\">", tagAfter, "(([a-zA-Z0-9]+:)?[a-zA-Z0-9]+)(?=\\()"));
         
         // Strings
-		tokenizers.add(new StringTokenizer("<span style=\"color: #660E80\">", tagAfter));
+		tokenizers.add(new StringTokenizer("<span class=\"s\">", tagAfter));
 	}
 
 	@Override
