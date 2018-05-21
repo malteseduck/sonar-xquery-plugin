@@ -93,7 +93,7 @@ param: '$' name=qName type=typeDeclaration? ;
 
 // EXPRESSIONS /////////////////////////////////////////////////////////////////
 
-expr: exprSingle (',' exprSingle)* ;
+expr: {disable(WHITESPACE);} exprSingle (',' exprSingle)* ;
 
 exprSingle: flworExpr | quantifiedExpr | typeswitchExpr | tryCatchExpr | ifExpr | orExpr ;
 
@@ -290,7 +290,7 @@ bracedURILiteral :
 
 constructor: directConstructor | computedConstructor ;
 
-directConstructor: dirElemConstructorOpenClose
+directConstructor: {disable(WHITESPACE);} dirElemConstructorOpenClose
                  | dirElemConstructorSingleTag
                  | (COMMENT | PI)
                  ;
@@ -298,7 +298,7 @@ directConstructor: dirElemConstructorOpenClose
 // [96]: we don't check that the closing tag is the same here. It should be
 // done elsewhere, if we really want to know.
 dirElemConstructorOpenClose: '<' openName=qName dirAttributeList endOpen='>'
-                             {enable(WHITESPACE);} dirElemContent* {disable(WHITESPACE);}
+                             dirElemContent*
                              startClose='<' slashClose='/' closeName=qName '>' ;
 
 dirElemConstructorSingleTag: '<' openName=qName dirAttributeList slashClose='/' '>' ;
@@ -323,7 +323,7 @@ dirAttributeValue: '"'  ( commonContent
                  ;
 
 dirElemContent: directConstructor
-              | {disable(WHITESPACE);} commonContent {enable(WHITESPACE);}
+              | commonContent
               | CDATA
               // ~[{}<&] = '" + ~['"{}<&]
               | Quot
@@ -332,7 +332,7 @@ dirElemContent: directConstructor
               | WS
               ;
 
-commonContent: (PredefinedEntityRef | CharRef) | '{' '{' | '}' '}' | '{' expr '}' ;
+commonContent: (PredefinedEntityRef | CharRef) | '{' '{' | '}' '}' | '{' expr? '}' ;
 
 computedConstructor: 'document' '{' expr '}'                            # docConstructor
                    | 'element'

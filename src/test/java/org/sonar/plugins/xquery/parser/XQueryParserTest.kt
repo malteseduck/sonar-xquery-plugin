@@ -22,7 +22,7 @@ class XQueryParserTest : AbstractSonarTest() {
 //        trace()
     }
 
-//    @Test
+    //    @Test
     @Throws(RecognitionException::class)
     fun testAttributesWithoutSpace() {
         log("testAttributesWithoutSpace():")
@@ -259,7 +259,7 @@ class XQueryParserTest : AbstractSonarTest() {
             DirElemConstructorOpenCloseContext::class,
             DirElemConstructorOpenCloseContext::class
         )
-        assertEquals(content.dirElemContent().childText(), "Hello World!", "Direct element content")
+        assertEquals(content.dirElemContent().childText(), "HelloWorld!", "Direct element content")
     }
 
     @Test
@@ -280,7 +280,8 @@ class XQueryParserTest : AbstractSonarTest() {
             DirElemConstructorOpenCloseContext::class,
             DirElemConstructorOpenCloseContext::class
         )
-        assertEquals(content.dirElemContent().childText(), "&nbsp;Hello World!", "Direct element content")
+        // TODO: Do we really need to support whitespace here?  Are there checks we need to be doing?
+        assertEquals(content.dirElemContent().childText(), "&nbsp;HelloWorld!", "Direct element content")
     }
 
     @Test
@@ -908,5 +909,20 @@ class XQueryParserTest : AbstractSonarTest() {
         )
         val varDecl: VarDeclContext = tree.find()
         assertThat(varDecl.value.findText<StringLiteralContext>()).isEqualTo("'null'")
+    }
+
+    @Test
+    fun `Should allow an empty expression with just a comment`() {
+        log("Should allow an empty expression with just a comment:")
+        trace()
+        val tree = parse(
+            code(
+                """<div>""",
+                """{(: ABC-1234 <span class="date">{ ${"$"}progress }%</span>:)}""",
+                """<h4 class="truncate"><a href="{${"$"}link}" title="{${"$"}set}">{${"$"}set}</a></h4>""",
+                """<p class="truncate">{${"$"}name}</p>""",
+                """</div>"""
+            )
+        )
     }
 }

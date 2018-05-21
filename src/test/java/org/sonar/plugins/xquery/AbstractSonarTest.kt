@@ -7,6 +7,7 @@ package org.sonar.plugins.xquery
 import org.antlr.runtime.RecognitionException
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.ParserRuleContext
+import org.antlr.v4.runtime.misc.ParseCancellationException
 import org.sonar.plugins.xquery.checks.AbstractCheck
 import org.sonar.plugins.xquery.language.Issue
 import org.sonar.plugins.xquery.language.SourceCode
@@ -250,21 +251,14 @@ open class AbstractSonarTest {
      * @return An AST for the code if it was successfully parsed
      * @throws RecognitionException
      */
-    @Throws(RecognitionException::class)
+    @Throws(ParseCancellationException::class)
     fun parse(code: SourceCode): ParserRuleContext {
         val visitors = ArrayList<XQueryAstVisitor>()
         val parser = XQueryAstParser(code, visitors)
-
-        try {
-            logger.fine(code.codeString)
-            val tree: ParserRuleContext = parser.parse(reporter!!)
-            logger.fine(tree.asDebugTree())
-            return tree
-        } catch (e: RecognitionException) {
-            val ae = AssertionError("Failed parsing source code")
-            ae.initCause(e)
-            throw ae
-        }
+        logger.fine(code.codeString)
+        val tree = parser.parse(reporter!!)
+        logger.fine(tree.asDebugTree())
+        return tree
     }
 
     /**

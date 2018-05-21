@@ -33,7 +33,7 @@ object GenerateAST {
     fun code(vararg strings: String): String {
         val code = StringBuffer()
         for (string in strings) {
-            if (code.length > 0) {
+            if (code.isNotEmpty()) {
                 code.append('\n')
             }
             code.append(string)
@@ -41,38 +41,18 @@ object GenerateAST {
         return code.toString()
     }
 
-    private fun printPrettyLispTree(tree: RuleContext, indentation: Int = 1) {
-
-        if (tree is ParserRuleContext) {
-            for (i in 0 until indentation) print("  ")
-            println(XQueryParser.ruleNames[tree.getRuleIndex()])
-            if (tree.children != null)
-                tree.children.forEach { child ->
-                    if (child is RuleContext)
-                        printPrettyLispTree(child, indentation + 1)
-                    else {
-                        for (i in 0..indentation) print("  ")
-                        println(child.text)
-                    }
-
-                }
-        }
-        println()
-    }
-
     @Throws(IOException::class)
     @JvmStatic
     fun main(args: Array<String>) {
-        //        XQueryTree tree = new XQueryTree();
-        //        ParseTreeBuilder builder = new XQueryParseTreeBuilder("RULE_mainModule");
         try {
             val source = code(
-                "xquery version '1.0-ml';",
-                "module namespace test = 'http://lds.org/code/test';",
-                "declare function test:add(\$a as xs:integer?, \$b as xs:integer?)",
-                "as xs:integer? {",
-                "    \$a + \$b",
-                "};"
+                """<div>""",
+                """    {(: ABC-1234 <span class="date">{ ${"$"}progress }%</span>:)}""",
+                """    <h4 class="truncate">""",
+                """        <a href="{${"$"}link}" title="{${"$"}set}">{${"$"}set}</a>""",
+                """    </h4>""",
+                """    <p class="truncate">{${"$"}name}</p>""",
+                """</div>"""
             )
 
             val lexer = XQueryLexer(CharStreams.fromString(source))
@@ -89,17 +69,10 @@ object GenerateAST {
             println("\n[PARSE-TREE]")
             val parser = XQueryParser(tokens)
             val tree = parser.module()
-            println(tree.asStringTree())
+            println(tree.asDebugTree())
 
         } catch (e: Exception) {
             e.printStackTrace()
-            //        } finally {
-            //            if (INCLUDE_PARSE_TREE) {
-            //                System.out.print(builder.getTree().toStringTree());
-            //            }
-            //            if (INCLUDE_AST) {
-            //                System.out.print(tree.toStringTree());
-            //            }
         }
 
     }
