@@ -1,0 +1,9 @@
+{
+  "title": "Dynamic Function Usage (Marklogic)",
+  "type": "VULNERABILITY",
+  "status": "ready",
+  "tags": [],
+  "defaultSeverity": "MAJOR",
+  "ruleSpecification": null,
+  "sqKey": "DynamicFunction"
+}

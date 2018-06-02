@@ -95,7 +95,7 @@ param: '$' name=qName type=typeDeclaration? ;
 
 expr: {disable(WHITESPACE);} exprSingle (',' exprSingle)* ;
 
-exprSingle: flworExpr | quantifiedExpr | typeswitchExpr | tryCatchExpr | ifExpr | orExpr ;
+exprSingle: flworExpr | quantifiedExpr | switchExpr | typeswitchExpr | tryCatchExpr | ifExpr | orExpr ;
 
 flworExpr: (forClause | letClause | windowClause)+
            ('where' whereExpr=exprSingle)?
@@ -146,7 +146,15 @@ quantifiedExpr: quantifier=('some' | 'every') vars+=quantifiedVar (',' vars+=qua
 
 quantifiedVar: '$' name=qName type=typeDeclaration? 'in' exprSingle ;
 
-typeswitchExpr: 'typeswitch' '(' switchExpr=expr ')'
+switchExpr : 'switch' '(' switchingExpr=expr ')'
+              clause=switchCaseClause+
+              'default' 'return' returnExpr=exprSingle ;
+
+switchCaseClause : ('case' switchCaseOperand)+ 'return' exprSingle ;
+
+switchCaseOperand : exprSingle ;
+
+typeswitchExpr: 'typeswitch' '(' switchingExpr=expr ')'
                 clauses=caseClause+
                 'default' ('$' var=qName)? 'return' returnExpr=exprSingle ;
 
@@ -183,15 +191,16 @@ orExpr:
       | l=orExpr op=('*' | 'div' | 'idiv' | 'mod') r=orExpr # mult
       | l=orExpr op=('+' | '-') r=orExpr                    # add
       | l=orExpr op='to' r=orExpr                           # range
-      | l=orExpr op=('eq' | 'ne' | 'lt' | 'le' | 'gt' | 'ge'
-               | '=' | '!=' | '<' | '<=' | '>' | '>='
-               | 'is' | '<<' | '>>') r=orExpr               # comparison
+      | l=orExpr ('eq' | 'ne' | 'lt' | 'le' | 'gt' | 'ge'
+               | '=' | '!=' | '<' | '<' '=' | '>' | '>' '='
+               | 'is' | '<' '<' | '>' '>') r=orExpr         # comparison
       | l=orExpr op='and' r=orExpr                          # and
       | l=orExpr op='or' r=orExpr                           # or
       | orExpr arrowExpr                                    # arrow
       | 'validate' vMode=('lax' | 'strict')? '{' expr '}'   # validate
       | PRAGMA+ '{' expr? '}'                               # extension
       | l=orExpr op='||' r=orExpr                           # strConcat
+      | relativePathExpr ('!' relativePathExpr)*            # simpleMap
       | '/' relativePathExpr?                               # rootedPath
       | '//' relativePathExpr                               # allDescPath
       | relativePathExpr                                    # relative
@@ -290,7 +299,7 @@ bracedURILiteral :
 
 constructor: directConstructor | computedConstructor ;
 
-directConstructor: {disable(WHITESPACE);} dirElemConstructorOpenClose
+directConstructor: dirElemConstructorOpenClose
                  | dirElemConstructorSingleTag
                  | (COMMENT | PI)
                  ;
@@ -311,6 +320,8 @@ dirAttributeValue: '"'  ( commonContent
                         // ~["{}<&] = ' + ~['"{}<&]
                         | Apos
                         | noQuotesNoBracesNoAmpNoLAng
+                        | '<'  // Why can't we have angle braces inside an attribute value?
+                        | '>'
                         )*
                    '"'
                  | '\'' (commonContent
@@ -318,6 +329,8 @@ dirAttributeValue: '"'  ( commonContent
                         // ~['{}<&] = " + ~['"{}<&"]
                         | Quot
                         | noQuotesNoBracesNoAmpNoLAng
+                        | '<'
+                        | '>'
                         )*
                    '\''
                  ;
@@ -329,10 +342,9 @@ dirElemContent: directConstructor
               | Quot
               | Apos
               | noQuotesNoBracesNoAmpNoLAng
-              | WS
               ;
 
-commonContent: (PredefinedEntityRef | CharRef) | '{' '{' | '}' '}' | '{' expr? '}' ;
+commonContent: (PredefinedEntityRef | CharRef ) | '{' '{' | '}' '}' | '{' expr? '}' ;
 
 computedConstructor: 'document' '{' expr '}'                            # docConstructor
                    | 'element'
@@ -345,6 +357,11 @@ computedConstructor: 'document' '{' expr '}'                            # docCon
                      (attrName=qName | ('{' attrExpr=expr '}'))
                      '{' contentExpr=expr? '}'                          # attrConstructor
                    | 'text' '{' expr '}'                                # textConstructor
+                   | 'array-node' '{' expr '}'                          # arrayNodeConstructor
+                   | 'boolean-node' '{' expr '}'                        # booleanNodeConstructor
+                   | 'number-node' '{' expr '}'                         # numberNodeConstructor
+                   | 'object-node' '{' properties+=objectNodeExpr* '}'  # objectNodeConstructor
+                   | 'null-node' '{' '}'                                # nullNodeConstructor
                    | 'comment' '{' expr '}'                             # commentConstructor
                    | 'processing-instruction'
                      (piName=ncName | '{' piExpr=expr '}')
@@ -357,6 +374,7 @@ computedConstructor: 'document' '{' expr '}'                            # docCon
                      (squareArrayConstructor | curlyArrayConstructor)   # arrayConstructor
                    ;
 
+objectNodeExpr: l=expr ':' r=expr ','? ;
 
 // TYPES AND TYPE TESTS ////////////////////////////////////////////////////////
 
@@ -376,7 +394,8 @@ itemType : kindTest
 
 kindTest: documentTest | elementTest | attributeTest | schemaElementTest
         | schemaAttributeTest | piTest | binaryTest | commentTest | textTest
-        | namespaceNodeTest | anyKindTest
+        | namespaceNodeTest | arrayNodeTest | booleanNodeTest | nullNodeTest
+        | numberNodeTest | objectNodeTest | anyKindTest
         ;
 
 atomicOrUnionType : eqName ;
@@ -428,6 +447,16 @@ textTest: 'text' '(' ')' ;
 
 namespaceNodeTest : 'namespace-node' '(' ')' ;
 
+arrayNodeTest: 'array-node' '(' name=stringLiteral? ')' ;
+
+booleanNodeTest: 'boolean-node' '(' ')' ;
+
+nullNodeTest: 'null-node' '(' ')' ;
+
+numberNodeTest: 'number-node' '(' ')' ;
+
+objectNodeTest: 'object-node' '(' ')' ;
+
 anyKindTest: 'node' '(' ')' ;
 
 arrowExpr: ( '=>' (eqName | '$' varName=eqName | parenthesizedExpr ) argumentList )+ ;
@@ -473,11 +502,13 @@ keywordOKForFunction: KW_ALLOWING
        | KW_ANCESTOR
        | KW_ANCESTOR_OR_SELF
        | KW_AND
+       | KW_ARRAY_NODE
        | KW_AS
        | KW_ASCENDING
        | KW_AT
        | KW_BASE_URI
        | KW_BINARY
+       | KW_BOOLEAN_NODE
        | KW_BOUNDARY_SPACE
        | KW_BY
        | KW_CASE
@@ -491,6 +522,8 @@ keywordOKForFunction: KW_ALLOWING
        | KW_COPY_NS
        | KW_COUNT
        | KW_DECLARE
+       | KW_DECIMAL_FORMAT
+       | KW_DECIMAL_SEPARATOR
        | KW_DEFAULT
        | KW_DESCENDANT
        | KW_DESCENDANT_OR_SELF
@@ -506,12 +539,15 @@ keywordOKForFunction: KW_ALLOWING
        | KW_EVERY
        | KW_EXCEPT
        | KW_EXTERNAL
+       | KW_EXPONENT_SEPARATOR
        | KW_FOLLOWING
        | KW_FOLLOWING_SIBLING
        | KW_FOR
        | KW_FUNCTION
        | KW_GE
        | KW_GREATEST
+       | KW_GROUP
+       | KW_GROUPING_SEPARATOR
        | KW_GT
        | KW_IDIV
        | KW_IMPORT
@@ -533,13 +569,19 @@ keywordOKForFunction: KW_ALLOWING
        | KW_NEXT
        | KW_NO_INHERIT
        | KW_NO_PRESERVE
+       | KW_NULL_NODE
+       | KW_NUMBER_NODE
+       | KW_OBJECT_NODE
        | KW_OF
+       | KW_ONLY
        | KW_OPTION
        | KW_OR
        | KW_ORDER
        | KW_ORDERED
        | KW_ORDERING
        | KW_PARENT
+       | KW_PATTERN_SEPARATOR
+       | KW_PER_MILLE
        | KW_PRECEDING
        | KW_PRECEDING_SIBLING
        | KW_PRESERVE
@@ -565,9 +607,11 @@ keywordOKForFunction: KW_ALLOWING
        | KW_VALIDATE
        | KW_VARIABLE
        | KW_VERSION
+       | KW_WHEN
        | KW_WHERE
        | KW_WINDOW
        | KW_XQUERY
+       | KW_ZERO_DIGIT
        ;
 
 dfPropertyName : KW_DECIMAL_SEPARATOR
@@ -582,7 +626,6 @@ dfPropertyName : KW_DECIMAL_SEPARATOR
     | KW_PATTERN_SEPARATOR
     | KW_EXPONENT_SEPARATOR ;
 
-
 // LITERALS /////////////////////////////////////////////////////////////
 
 literal : numericLiteral | stringLiteral ;
@@ -594,10 +637,9 @@ stringLiteral: '"' {enable(WHITESPACE);} ('"' '"'
                    | CharRef
                    // ~["&] = '{}< + ~['"{}<&]
                    | Apos
-                   | LBRACE
-                   | RBRACE
                    | LANGLE
-                   | POUND
+                   | '{' '{'
+                   | '}' '}'
                    | noQuotesNoBracesNoAmpNoLAng
                    | WS
                    // WS and XQComment are in the HIDDEN channel
@@ -608,10 +650,9 @@ stringLiteral: '"' {enable(WHITESPACE);} ('"' '"'
                     | CharRef
                     // ~['&] = "{}< + ~['"{}<&]
                     | Quot
-                    | LBRACE
-                    | RBRACE
                     | LANGLE
-                    | POUND
+                    | '{' '{'
+                    | '}' '}'
                     | noQuotesNoBracesNoAmpNoLAng
                     | WS
                     // WS and XQComment are in the HIDDEN channel
@@ -644,11 +685,15 @@ noQuotesNoBracesNoAmpNoLAng:
                      | SLASH
                      | DSLASH
                      | VBAR
+                     | DBAR
                      | RANGLE
+                     | ARROW
+                     | BANG
                      | QUESTION
                      | AT
                      | DOLLAR
                      | PERCENT
+                     | POUND
                      | FullQName
                      | NCNameWithLocalWildcard
                      | NCNameWithPrefixWildcard

@@ -5,11 +5,9 @@
 package org.sonar.plugins.xquery.checks
 
 import org.antlr.v4.runtime.ParserRuleContext
-import org.apache.commons.lang.StringUtils
-import org.sonar.plugins.xquery.parser.*
 import org.sonar.plugins.xquery.parser.XQueryParser.*
-
-import java.util.ArrayList
+import org.sonar.plugins.xquery.parser.getLine
+import java.util.*
 import java.util.regex.Pattern
 
 abstract class AbstractProhibitVariableCheck : AbstractCheck() {

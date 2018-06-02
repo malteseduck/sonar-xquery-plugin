@@ -7,6 +7,7 @@ package org.sonar.plugins.xquery
 import org.sonar.api.batch.Sensor
 import org.sonar.api.batch.SensorContext
 import org.sonar.api.batch.fs.FileSystem
+import org.sonar.api.batch.rule.Checks
 import org.sonar.api.checks.AnnotationCheckFactory
 import org.sonar.api.component.ResourcePerspectives
 import org.sonar.api.issue.Issuable

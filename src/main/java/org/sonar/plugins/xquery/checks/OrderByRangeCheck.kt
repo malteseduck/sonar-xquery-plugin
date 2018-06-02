@@ -6,8 +6,8 @@ package org.sonar.plugins.xquery.checks
 
 import org.antlr.v4.runtime.ParserRuleContext
 import org.sonar.api.rule.RuleKey
-import org.sonar.check.Priority
 import org.sonar.check.Rule
+import org.sonar.plugins.xquery.checks.OrderByRangeCheck.Companion.RULE_KEY
 import org.sonar.plugins.xquery.parser.XQueryParser.OrderSpecContext
 import org.sonar.plugins.xquery.parser.getLine
 import org.sonar.plugins.xquery.rules.CheckClasses
@@ -17,7 +17,7 @@ import org.sonar.plugins.xquery.rules.CheckClasses
  *
  * @since 1.0
  */
-@Rule(key = OrderByRangeCheck.RULE_KEY, name = "Range Evaluation in Order By Clause", description = "Order bys or gt/lt checks on large numbers of documents " + "might achieve better performance with a range index.", priority = Priority.INFO)
+@Rule(key = RULE_KEY)
 class OrderByRangeCheck : AbstractCheck() {
 
     override fun enterExpression(node: ParserRuleContext) {

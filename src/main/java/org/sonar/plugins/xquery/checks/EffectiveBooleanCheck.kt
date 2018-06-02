@@ -6,12 +6,9 @@ package org.sonar.plugins.xquery.checks
 
 import org.antlr.v4.runtime.ParserRuleContext
 import org.sonar.api.rule.RuleKey
-import org.sonar.check.Priority
 import org.sonar.check.Rule
-import org.sonar.plugins.xquery.parser.XQueryParser
+import org.sonar.plugins.xquery.checks.EffectiveBooleanCheck.Companion.RULE_KEY
 import org.sonar.plugins.xquery.parser.XQueryParser.*
-import org.sonar.plugins.xquery.parser.find
-import org.sonar.plugins.xquery.parser.getLine
 import org.sonar.plugins.xquery.rules.CheckClasses
 
 /**
@@ -19,7 +16,7 @@ import org.sonar.plugins.xquery.rules.CheckClasses
  *
  * @since 1.0
  */
-@Rule(key = EffectiveBooleanCheck.RULE_KEY, name = "Effective Boolean in Conditional Predicate", description = "Unless the value in the conditional is of type xs:boolean it is recommended you use " + "fn:exists(), fn:empty(), or other boolean functions inside of conditional predicates to check values.", priority = Priority.MINOR)
+@Rule(key = RULE_KEY)
 class EffectiveBooleanCheck : AbstractCheck() {
 
     override fun enterExpression(node: ParserRuleContext) {

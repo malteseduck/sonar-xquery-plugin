@@ -4,12 +4,10 @@
 
 package org.sonar.plugins.xquery.language
 
-import org.apache.commons.lang.StringUtils
 import org.sonar.api.measures.CoreMetrics
 import org.sonar.api.utils.SonarException
 import org.sonar.plugins.xquery.checks.AbstractCheck
-
-import java.util.ArrayList
+import java.util.*
 import java.util.logging.Logger
 
 /**
@@ -33,8 +31,8 @@ class XQueryLineCountParser(override var sourceCode: SourceCode?) : AbstractChec
             try {
                 var commenting = false
                 for (line in code) {
-                    val trimmed = StringUtils.trim(line)
-                    if (StringUtils.isBlank(trimmed)) {
+                    val trimmed = line.trim()
+                    if (trimmed.isBlank()) {
                         blankLines++
                     } else if (trimmed.startsWith("(:") && trimmed.endsWith(":)")) {
                         commentLines++
@@ -61,7 +59,7 @@ class XQueryLineCountParser(override var sourceCode: SourceCode?) : AbstractChec
         }
 
         sourceCode?.addMeasure(CoreMetrics.FUNCTIONS, functions.toDouble())
-        sourceCode?.addMeasure(CoreMetrics.LINES, linesOfCode.toDouble())
+//        sourceCode?.addMeasure(CoreMetrics.LINES, linesOfCode.toDouble())
         sourceCode?.addMeasure(CoreMetrics.COMMENT_LINES, commentLines.toDouble())
         sourceCode?.addMeasure(CoreMetrics.NCLOC, linesOfCode.toDouble() - blankLines.toDouble() - commentLines.toDouble())
     }

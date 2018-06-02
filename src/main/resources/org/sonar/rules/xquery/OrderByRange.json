@@ -1,0 +1,9 @@
+{
+  "title": "Range Evaluation in Order By Clause",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "tags": [],
+  "defaultSeverity": "INFO",
+  "ruleSpecification": null,
+  "sqKey": "OrderByRange"
+}

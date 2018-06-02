@@ -6,8 +6,8 @@ package org.sonar.plugins.xquery.checks
 
 import org.antlr.v4.runtime.ParserRuleContext
 import org.sonar.api.rule.RuleKey
-import org.sonar.check.Priority
 import org.sonar.check.Rule
+import org.sonar.plugins.xquery.checks.OperationsInPredicateCheck.Companion.RULE_KEY
 import org.sonar.plugins.xquery.parser.XQueryParser.*
 import org.sonar.plugins.xquery.parser.getLine
 import org.sonar.plugins.xquery.rules.CheckClasses
@@ -17,7 +17,7 @@ import org.sonar.plugins.xquery.rules.CheckClasses
  *
  * @since 1.0
  */
-@Rule(key = OperationsInPredicateCheck.RULE_KEY, name = "Avoid Operations in Predicates", description = "Instead of calling functions or performing operations in predicates " + "try assigning the results to a variable before the predicate.", priority = Priority.MAJOR)
+@Rule(key = RULE_KEY)
 class OperationsInPredicateCheck : AbstractPredicateCheck() {
 
     override fun enterExpression(node: ParserRuleContext) {

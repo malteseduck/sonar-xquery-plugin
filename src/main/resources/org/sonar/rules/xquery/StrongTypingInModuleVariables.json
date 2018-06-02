@@ -1,0 +1,9 @@
+{
+  "title": "Use Strong Typing when Declaring Module Variable",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "tags": [],
+  "defaultSeverity": "CRITICAL",
+  "ruleSpecification": null,
+  "sqKey": "StrongTypingInModuleVariables"
+}

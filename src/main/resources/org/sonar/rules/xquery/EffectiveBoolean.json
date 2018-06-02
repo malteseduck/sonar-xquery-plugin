@@ -1,0 +1,9 @@
+{
+  "title": "Effective Boolean in Conditional Predicate",
+  "type": "CODE_SMELL",
+  "status": "beta",
+  "tags": [],
+  "defaultSeverity": "MINOR",
+  "ruleSpecification": null,
+  "sqKey": "EffectiveBoolean"
+}

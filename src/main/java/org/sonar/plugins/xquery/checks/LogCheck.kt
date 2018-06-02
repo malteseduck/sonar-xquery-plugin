@@ -5,8 +5,8 @@
 package org.sonar.plugins.xquery.checks
 
 import org.sonar.api.rule.RuleKey
-import org.sonar.check.Priority
 import org.sonar.check.Rule
+import org.sonar.plugins.xquery.checks.LogCheck.Companion.RULE_KEY
 import org.sonar.plugins.xquery.rules.CheckClasses
 
 /**
@@ -14,7 +14,7 @@ import org.sonar.plugins.xquery.rules.CheckClasses
  *
  * @since 1.1
  */
-@Rule(key = LogCheck.RULE_KEY, name = "Log Function Usage (Marklogic)", description = "Favor using xdmp:trace() instead of xdmp:log().\n" + "Please note that this check is Marklogic specific.", priority = Priority.MINOR)
+@Rule(key = RULE_KEY)
 class LogCheck : AbstractProhibitFunctionCheck() {
 
     override val functionNamespace: String? = null

@@ -1,0 +1,9 @@
+{
+  "title": "Function Mapping Usage (Marklogic)",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "tags": [],
+  "defaultSeverity": "MAJOR",
+  "ruleSpecification": null,
+  "sqKey": "FunctionMapping"
+}

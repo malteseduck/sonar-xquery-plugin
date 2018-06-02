@@ -29,15 +29,16 @@ object AnalyzeProject {
 
     var CODE_ROOT = "C:\\Users\\Chris\\Documents\\Projects\\WealthCounsel\\wealth-counsel-online"
     var BASE_DIR = File(CODE_ROOT)
+    var SEP = File.separatorChar
 
     // Comma-delimited (no spaces) list of includes/excludes for the different phases
     var MAPPING_INCLUDES = "**/*.xqy"
-    var MAPPING_EXCLUDES = "**/target/**"
-    var PROCESS_INCLUDES = "**/*.xqy"
-    var PROCESS_EXCLUDES = "**/target/**,**/shared/**"
+    var MAPPING_EXCLUDES = "**/target/**,test/**,**/scripts/**"
+    var PROCESS_INCLUDES = "**/default.xqy"
+    var PROCESS_EXCLUDES = "**/target/**,**/shared/**,test/**,**/scripts/**"
 
     // Regular expression of list of rules to evaluate (.* for all)
-    var RULE_INCLUDES = "EffectiveBoolean.*"
+    var RULE_INCLUDES = ".*"
     var SOURCE_DIRS = Arrays.asList(File("$CODE_ROOT/src/main/xquery"))
 
     @Throws(IOException::class)
@@ -54,7 +55,7 @@ object AnalyzeProject {
         visitors.add(mapper)
 
         // Set up output directories
-        val treeDirectory = System.getProperty("java.io.tmpdir") + "/rule-analysis"
+        val treeDirectory = System.getProperty("user.dir") + SEP + "target" + SEP + "rule-analysis"
         val outputFile = "$treeDirectory/output.txt"
         FileUtils.mkdir(treeDirectory)
         FileUtils.cleanDirectory(treeDirectory)

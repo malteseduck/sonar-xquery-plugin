@@ -6,8 +6,8 @@ package org.sonar.plugins.xquery.checks
 
 import org.antlr.v4.runtime.ParserRuleContext
 import org.sonar.api.rule.RuleKey
-import org.sonar.check.Priority
 import org.sonar.check.Rule
+import org.sonar.plugins.xquery.checks.StrongTypingInFLWORCheck.Companion.RULE_KEY
 import org.sonar.plugins.xquery.parser.XQueryParser.ForVarContext
 import org.sonar.plugins.xquery.parser.XQueryParser.LetVarContext
 import org.sonar.plugins.xquery.parser.getLine
@@ -18,10 +18,7 @@ import org.sonar.plugins.xquery.rules.CheckClasses
  *
  * @since 1.0
  */
-@Rule(key = StrongTypingInFLWORCheck.RULE_KEY, name = "Use Strong Typing FLWOR Expressions", description = "Declare types for FLWOR 'let' and 'for' clauses to increase readability and catch potential bugs. " +
-        "Also try to scope the types as narrowly as possible " +
-        "(i.e. use 'element()' instead of 'item()' when the value is an element) " +
-        "and include quantifiers on each type.", priority = Priority.MINOR)
+@Rule(key = RULE_KEY)
 class StrongTypingInFLWORCheck : AbstractCheck() {
 
     override fun enterExpression(node: ParserRuleContext) {

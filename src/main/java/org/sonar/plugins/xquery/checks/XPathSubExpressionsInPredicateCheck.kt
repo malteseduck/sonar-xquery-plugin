@@ -9,8 +9,9 @@ import org.antlr.v4.runtime.tree.TerminalNode
 import org.sonar.api.rule.RuleKey
 import org.sonar.check.Priority
 import org.sonar.check.Rule
-import org.sonar.plugins.xquery.parser.XQueryParser
-import org.sonar.plugins.xquery.parser.XQueryParser.*
+import org.sonar.plugins.xquery.checks.XPathSubExpressionsInPredicateCheck.Companion.RULE_KEY
+import org.sonar.plugins.xquery.parser.XQueryParser.PredicateContext
+import org.sonar.plugins.xquery.parser.XQueryParser.RelativePathExprContext
 import org.sonar.plugins.xquery.parser.getLine
 import org.sonar.plugins.xquery.rules.CheckClasses
 
@@ -19,9 +20,7 @@ import org.sonar.plugins.xquery.rules.CheckClasses
  *
  * @since 1.0
  */
-@Rule(key = XPathSubExpressionsInPredicateCheck.RULE_KEY, name = "Avoid XPath Sub-expressions in XPath Predicates", description = "Watch out for expressions like '[foo/bar]' or '[foo[bar]]' " +
-        "because they can sometimes be bad for performance. " +
-        "If the result is static it can be bound to a variable.", priority = Priority.INFO)
+@Rule(key = RULE_KEY)
 class XPathSubExpressionsInPredicateCheck : AbstractPredicateCheck() {
 
     override fun enterExpression(node: ParserRuleContext) {

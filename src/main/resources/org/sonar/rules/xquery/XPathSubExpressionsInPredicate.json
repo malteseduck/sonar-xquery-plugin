@@ -1,0 +1,9 @@
+{
+  "title": "Avoid XPath Sub-expressions in XPath Predicates",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "tags": [],
+  "defaultSeverity": "INFO",
+  "ruleSpecification": null,
+  "sqKey": "XPathSubExpressionsInPredicate"
+}

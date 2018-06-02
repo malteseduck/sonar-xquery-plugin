@@ -6,13 +6,11 @@ package org.sonar.plugins.xquery.checks
 
 import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.tree.TerminalNode
-import org.antlr.v4.runtime.tree.TerminalNodeImpl
 import org.sonar.api.rule.RuleKey
-import org.sonar.check.Priority
 import org.sonar.check.Rule
-import org.sonar.plugins.xquery.parser.XQueryParser
-import org.sonar.plugins.xquery.parser.XQueryParser.*
-import org.sonar.plugins.xquery.parser.getLine
+import org.sonar.plugins.xquery.checks.XPathDescendantStepsCheck.Companion.RULE_KEY
+import org.sonar.plugins.xquery.parser.XQueryParser.DSLASH
+import org.sonar.plugins.xquery.parser.XQueryParser.RelativePathExprContext
 import org.sonar.plugins.xquery.rules.CheckClasses
 
 /**
@@ -20,7 +18,7 @@ import org.sonar.plugins.xquery.rules.CheckClasses
  *
  * @since 1.0
  */
-@Rule(key = XPathDescendantStepsCheck.RULE_KEY, name = "Avoid Using '//' in XPath", description = "Favor fully-qualified paths in XPath " + "for readability and to avoid potential performance problems.", priority = Priority.MINOR)
+@Rule(key = RULE_KEY)
 class XPathDescendantStepsCheck : AbstractPathCheck() {
 
     override fun enterExpression(node: ParserRuleContext) {
@@ -33,7 +31,7 @@ class XPathDescendantStepsCheck : AbstractPathCheck() {
     }
 
     companion object {
-        const val RULE_KEY = "XpathDescendantSteps"
+        const val RULE_KEY = "XPathDescendantSteps"
         private val RULE = RuleKey.of(CheckClasses.REPOSITORY_KEY, RULE_KEY)
     }
 }

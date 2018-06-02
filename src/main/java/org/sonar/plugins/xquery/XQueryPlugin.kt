@@ -12,6 +12,7 @@ import org.sonar.plugins.xquery.language.XQuery
 import org.sonar.plugins.xquery.language.XQueryCodeColorizerFormat
 import org.sonar.plugins.xquery.language.XQuerySourceImporter
 import org.sonar.plugins.xquery.rules.XQueryProfile
+import org.sonar.plugins.xquery.rules.XQueryRulesDefinition
 import org.sonar.plugins.xquery.rules.XQueryRulesRepository
 import org.sonar.plugins.xquery.test.SurefireXQueryParser
 import org.sonar.plugins.xquery.test.XQueryTestSensor
@@ -53,7 +54,7 @@ class XQueryPlugin : SonarPlugin() {
 
             // XQuery rules/profiles
             XQueryProfile::class.java,
-            XQueryRulesRepository::class.java,
+            XQueryRulesDefinition::class.java,
 
             // XQuery sensors
             XQuerySensor::class.java,

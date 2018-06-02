@@ -8,7 +8,9 @@ import org.antlr.v4.runtime.ParserRuleContext
 import org.sonar.api.rule.RuleKey
 import org.sonar.check.Priority
 import org.sonar.check.Rule
-import org.sonar.plugins.xquery.parser.XQueryParser.*
+import org.sonar.plugins.xquery.checks.XQueryVersionCheck.Companion.RULE_KEY
+import org.sonar.plugins.xquery.parser.XQueryParser.ModuleTransactionContext
+import org.sonar.plugins.xquery.parser.XQueryParser.VersionDeclContext
 import org.sonar.plugins.xquery.parser.getLine
 import org.sonar.plugins.xquery.parser.unquotedText
 import org.sonar.plugins.xquery.rules.CheckClasses
@@ -18,11 +20,7 @@ import org.sonar.plugins.xquery.rules.CheckClasses
  *
  * @since 1.0
  */
-@Rule(key = XQueryVersionCheck.RULE_KEY, name = "XQuery Version", description = "Ensure that you declare the latest XQuery version (1.0-ml/3.0) " +
-        "at the top of each of your scripts " +
-        "(as opposed to declaring an older version - 0.9-ml - or not declaring a version at all). " +
-        "This ensures better compatibility of code after server upgrades " +
-        "and consistent behavior in XQuery processing.", priority = Priority.MINOR)
+@Rule(key = RULE_KEY)
 class XQueryVersionCheck : AbstractCheck() {
 
     private var hasVersion = false

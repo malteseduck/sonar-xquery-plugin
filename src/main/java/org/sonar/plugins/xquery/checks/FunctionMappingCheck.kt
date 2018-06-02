@@ -6,8 +6,8 @@ package org.sonar.plugins.xquery.checks
 
 import org.antlr.v4.runtime.ParserRuleContext
 import org.sonar.api.rule.RuleKey
-import org.sonar.check.Priority
 import org.sonar.check.Rule
+import org.sonar.plugins.xquery.checks.FunctionMappingCheck.Companion.RULE_KEY
 import org.sonar.plugins.xquery.parser.XQueryParser.*
 import org.sonar.plugins.xquery.parser.getLine
 import org.sonar.plugins.xquery.parser.unquotedText
@@ -18,11 +18,7 @@ import org.sonar.plugins.xquery.rules.CheckClasses
  *
  * @since 1.0
  */
-@Rule(key = FunctionMappingCheck.RULE_KEY, name = "Function Mapping Usage (Marklogic)", description = "Make sure you are intentionally using and/or understand function mapping " +
-        "- otherwise disable it with 'declare option xdmp:mapping \"false\";'. " +
-        "If you wish to use it you should explicitly declare 'declare option xdmp:mapping \"true\";' " +
-        "for readability/maintainability.\n" +
-        "Please note that this check is Marklogic specific.", priority = Priority.MAJOR)
+@Rule(key = RULE_KEY)
 class FunctionMappingCheck : AbstractCheck() {
 
     private var capable = false

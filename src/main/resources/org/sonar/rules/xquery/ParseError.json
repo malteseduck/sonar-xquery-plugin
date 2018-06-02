@@ -1,0 +1,9 @@
+{
+  "title": "Code Parsing Error",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "tags": [],
+  "defaultSeverity": "INFO",
+  "ruleSpecification": null,
+  "sqKey": "ParseError"
+}

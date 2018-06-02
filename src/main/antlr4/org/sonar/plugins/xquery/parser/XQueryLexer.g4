@@ -18,10 +18,10 @@ Digits: [0-9]+ ;
 PredefinedEntityRef: '&' (
     'lt' | 'gt' | 'amp' | 'quot' | 'apos'
 
-    // Additional special entities supported in MarkLogic (removed ML "checking")
-    | 'bdquo' | 'brvbar' | 'bull' | 'circ' | 'copy' | 'emsp' | 'ensp' | 'hellip' | 'iexcl' | 'iquest' | 'laquo' | 'ldquo' | 'lsaquo' | 'lsquo' | 'mdash' | 'nbsp' | 'ndash' | 'oline' | 'prime' | 'Prime' | 'raquo' | 'rdquo' | 'rsaquo' | 'rsquo' | 'sbquo' | 'thinsp' | 'tilde' | 'uml'
+    // Additional special entities supported in MarkLogic
+    | 'bdquo' | 'brvbar' | 'bull' | 'circ' | 'copy' | 'emsp' | 'ensp' | 'hellip' | 'iexcl' | 'iquest' | 'laquo' | 'ldquo' | 'lsaquo' | 'lsquo' | 'mdash' | 'nbsp' | 'ndash' | 'oline' | 'prime' | 'Prime' | 'reg' | 'raquo' | 'rdquo' | 'rsaquo' | 'rsquo' | 'sbquo' | 'thinsp' | 'tilde' | 'uml'
 
-    // Additional ISO 8859-1 entities supported in MarkLogic (removed ML "checking")
+    // Additional ISO 8859-1 entities supported in MarkLogic
     | 'acute' | 'cedil' | 'cent' | 'curren' | 'deg' | 'divide' | 'macr' | 'micro' | 'middot' | 'not' | 'ordf' | 'ordm' | 'para' | 'plusmn' | 'pound' | 'sect' | 'times' | 'yen'
     ) ';'
 ;
@@ -73,13 +73,10 @@ SLASH:  '/'  ;
 DSLASH: '//' ;
 VBAR:   '|'  ;
 DBAR:   '||' ;
+BANG:   '!';
 
 LANGLE:    '<'  ;
 RANGLE:    '>'  ;
-LE:        '<=' ;
-GE:        '>=' ;
-ANGLEIN:   '<<' ;
-ANGLEOUT:  '>>' ;
 ARROW:     '=>' ;
 
 QUESTION: '?' ;
@@ -96,12 +93,14 @@ KW_ANCESTOR:           'ancestor';
 KW_ANCESTOR_OR_SELF:   'ancestor-or-self';
 KW_AND:                'and';
 KW_ARRAY:              'array';
+KW_ARRAY_NODE:         'array-node';
 KW_AS:                 'as';
 KW_ASCENDING:          'ascending';
 KW_AT:                 'at';
 KW_ATTRIBUTE:          'attribute';
 KW_BASE_URI:           'base-uri';
 KW_BINARY:             'binary';
+KW_BOOLEAN_NODE:       'boolean-node';
 KW_BOUNDARY_SPACE:     'boundary-space';
 KW_BY:                 'by';
 KW_CASE:               'case';
@@ -172,6 +171,9 @@ KW_NEXT:               'next';
 KW_NO_INHERIT:         'no-inherit';
 KW_NO_PRESERVE:        'no-preserve';
 KW_NODE:               'node';
+KW_NULL_NODE:          'null-node';
+KW_NUMBER_NODE:        'number-node';
+KW_OBJECT_NODE:        'object-node';
 KW_OF:                 'of';
 KW_ONLY:               'only';
 KW_OPTION:             'option';
@@ -230,8 +232,6 @@ NCNameWithPrefixWildcard: '*' ':' NCName ;
 // it is 'an XML Name, minus the ":"'
 NCName: NameStartChar NameChar*;
 
-BracedURILiteralInternal : [^&{}] ;
-
 fragment
 NameStartChar: [_a-zA-Z]
     | '\u00C0'..'\u00D6'
@@ -281,3 +281,6 @@ XQComment: '(' ':' (XQComment | '(' ~[:] | ':' ~[)] | ~[:(])* ':'+ ')' -> channe
 // This rule needs to be the very last one, so it has the lowest priority.
 
 ContentChar:  ~["'{}<&]  ;
+
+// This is for a very specific use case and should not be matched, except in a specific parser rule
+BracedURILiteralInternal : ~[&{}] ;

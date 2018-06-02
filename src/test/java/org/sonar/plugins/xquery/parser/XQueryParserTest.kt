@@ -23,7 +23,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     //    @Test
-    @Throws(RecognitionException::class)
     fun testAttributesWithoutSpace() {
         log("testAttributesWithoutSpace():")
         try {
@@ -40,7 +39,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testBinaryConstructor() {
         log("testBinaryConstructor():")
         val tree = parse(
@@ -53,7 +51,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testComment() {
         log("testComment():")
         val tree = parse(
@@ -69,7 +66,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testCommentAtBeginning() {
         log("testCommentAtBeginning():")
         val tree = parse(
@@ -90,7 +86,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testCommentInDeclaration() {
         log("testComment():")
         val tree = parse(
@@ -110,7 +105,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testCommentLiteral() {
         log("testCommentLiteral():")
         val tree = parse(
@@ -127,7 +121,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testCommentNotAtBeginning() {
         log("testCommentNotAtBeginning():")
         val tree = parse(
@@ -148,7 +141,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testComparison() {
         log("testComparison():")
         val tree = parse(
@@ -162,12 +154,11 @@ class XQueryParserTest : AbstractSonarTest() {
         val nodes = compare.children
         Assert.assertEquals(nodes?.size, 3, "child nodes")
         assertEquals(compare.l.findText<IntegerContext>(), "2", "First expression")
-        assertEquals(compare.op.text, "gt", "Comparator")
+        assertEquals(compare.children[1].text, "gt", "Comparator")
         assertEquals(compare.r.findText<IntegerContext>(), "1", "Second expression")
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testComputedElement() {
         log("testComputedElement():")
         val tree = parse(
@@ -189,7 +180,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testComputedElementWithEntity() {
         log("testComputedElementWithEntity():")
         val tree = parse(
@@ -211,7 +201,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testConditional() {
         log("testConditional():")
         val tree = parse(
@@ -230,7 +219,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testDirectComment() {
         log("testDirectElement():")
         val tree = parse(
@@ -242,7 +230,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testDirectElement() {
         log("testDirectElement():")
         val tree = parse(
@@ -263,7 +250,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testDirectElementWithEntity() {
         log("testDirectElementWithEntity():")
         val tree = parse(
@@ -285,7 +271,38 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
+    fun `Should properly parse an attribute when it contains Angular code`() {
+        log("Should properly parse an attribute when it contains Angular code:")
+        val tree = parse(
+            code(
+                """xquery version "1.0-ml";""",
+                """<html>""",
+                """    <div ng-class="{{'alert-danger': attorneyUsers >= attorneyLicenses}}"/>""",
+                """</html>"""
+            )
+        )
+        val attr: DirAttributeValueContext = tree.find()
+        assertThat(attr.text).isEqualTo(""""{{'alert-danger':attorneyUsers>=attorneyLicenses}}"""")
+    }
+
+    @Test
+    fun `Should properly parse an attribute when it contains a pound symbol`() {
+        log("Should properly parse an attribute when it contains a pound symbol:")
+        val tree = parse(
+            code(
+                """xquery version "1.0-ml";""",
+                """<html>""",
+                """    <a href='/admin/practice-admin#?tab=integrations'>Integrations Setup</a>""",
+                """</html>"""
+            )
+        )
+
+        val anchor: DirElemConstructorOpenCloseContext = tree.findIn(DirElemContentContext::class)
+        val href = anchor.dirAttributeList().dirAttributeValue(0)
+        assertThat(href.text).isEqualTo("'/admin/practice-admin#?tab=integrations'")
+    }
+
+    @Test
     fun testDoctypeDeclaration() {
         log("testDoctypeDeclaration():")
         val tree = parse(
@@ -302,7 +319,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testEmbeddedExpression() {
         log("testEmbeddedExpression():")
         val tree = parse(
@@ -316,7 +332,20 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
+    fun `Should parse correctly when a function argument string has double braces`() {
+        log("Should parse correctly when a string literal has double braces:")
+        trace()
+        val tree = parse(
+            code(
+                "xquery version '1.0-ml';",
+                "map:entry(\"id\", '{{ quicklinks.id }}')"
+            )
+        )
+        val func: FunctionCallContext = tree.find()
+        assertEquals(func.argumentList().argument(1).text, "'{{ quicklinks.id }}'")
+    }
+
+    @Test
     fun testEmbeddedExpressionWithEntity() {
         log("testEmbeddedExpressionWithEntity():")
         val tree = parse(
@@ -330,7 +359,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testEmptyString() {
         log("testEmptyString():")
         val tree = parse(
@@ -344,7 +372,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testEntitiesInConcat() {
         log("testEntitiesInConcat():")
         val tree = parse(
@@ -360,7 +387,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testEntitiesInHtml() {
         log("testEntitiesInHtml():")
         val tree = parse(
@@ -377,7 +403,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testEntitiesInString() {
         log("testEntitiesInString():")
         val tree = parse(
@@ -427,7 +452,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testFLOWR() {
         log("testFLOWR():")
         val tree = parse(
@@ -451,7 +475,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testFLOWRBindTypes() {
         log("testFLOWRBindTypes():")
         val tree = parse(
@@ -471,7 +494,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testFLOWROrderBy() {
         log("testFLOWROrderBy():")
         val tree = parse(
@@ -492,7 +514,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testFunctionCall() {
         log("testFunctionCall():")
         val tree = parse(
@@ -509,7 +530,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testFunctionCallInXPath() {
         log("testFunctionCallInXPath():")
         val tree = parse(
@@ -523,7 +543,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testFunctionCallNested() {
         log("testFunctionCallNested():")
         val tree = parse(
@@ -542,7 +561,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testFunctionCallWithEntity() {
         log("testFunctionCallWithEntity():")
         val tree = parse(
@@ -559,7 +577,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testFunctionTypeBinaryReturn() {
         log("testFunctionTypeBinaryReturn():")
         val tree = parse(
@@ -579,7 +596,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testImportOnFirstLine() {
         log("testImportOnFirstLine():")
         val tree = parse(
@@ -595,7 +611,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testKeywordNamespaceElement() {
         log("testKeywordNamespace():")
         val tree = parse(
@@ -610,7 +625,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testKeywordNamespaceFunctionCall() {
         log("testKeywordNamespaceFunctionCall():")
         val tree = parse(
@@ -626,7 +640,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testModuleDeclaration() {
         log("testModuleDeclaration():")
         val tree = parse(
@@ -642,7 +655,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testModuleImport() {
         log("testModuleImport():")
         val tree = parse(
@@ -661,7 +673,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testNamespaceAxis() {
         log("testNamespaceAxis():")
         val tree = parse(
@@ -680,7 +691,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testOptionDeclaration() {
         log("testOptionDeclaration():")
         val tree = parse(
@@ -697,7 +707,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testPredicate() {
         log("testPredicate():")
         val tree = parse(
@@ -714,7 +723,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testPrivateVariable() {
         log("testPrivateVariable():")
         val tree = parse(
@@ -729,7 +737,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testPropertyAxis() {
         log("testPropertyAxis():")
         val tree = parse(
@@ -743,7 +750,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testSelfAxis() {
         log("testSelfAxis():")
         val tree = parse(
@@ -762,7 +768,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testSequenceComparison() {
         log("testSequenceComparison():")
         val tree = parse(
@@ -777,7 +782,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testStepWithPeriod() {
         log("testStepWithPeriod():")
         val tree = parse(
@@ -791,7 +795,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testStringLiteralLineNumbers() {
         log("testStringLiteralLineNumbers():")
         val tree = parse(
@@ -811,7 +814,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testTransactionalSeparator() {
         log("testTransactionalSeparator():")
         val tree = parse(
@@ -830,7 +832,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testTryCatch() {
         log("testTryCatch():")
         val tree = parse(
@@ -852,7 +853,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testTypeswitchLineNumbers() {
         log("testTypeswitchLineNumbers():")
         val tree = parse(
@@ -872,7 +872,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testTypeswitchTypes() {
         log("testTypeswitchTypes():")
         val tree = parse(
@@ -897,7 +896,6 @@ class XQueryParserTest : AbstractSonarTest() {
     }
 
     @Test
-    @Throws(RecognitionException::class)
     fun testVariableDeclarationWithNull() {
         log("testVariableDeclarationWithNull():")
         val tree = parse(
@@ -914,7 +912,6 @@ class XQueryParserTest : AbstractSonarTest() {
     @Test
     fun `Should allow an empty expression with just a comment`() {
         log("Should allow an empty expression with just a comment:")
-        trace()
         val tree = parse(
             code(
                 """<div>""",
@@ -924,5 +921,69 @@ class XQueryParserTest : AbstractSonarTest() {
                 """</div>"""
             )
         )
+    }
+
+    @Test
+    fun `Should be able to parse JSON node tests`() {
+        log("Should be able to parse JSON node tests:")
+        val tree = parse(
+            code(
+                "let \$node as object-node() := /object-node()",
+                "return \$node"
+            )
+        )
+        val letVar: LetVarContext = tree.find()
+        assertThat(letVar.typeText()).isEqualTo("object-node()")
+    }
+
+    @Test
+    fun `Should be able to parse JSON node constructors`() {
+        log("Should be able to parse JSON node constructors:")
+        val tree = parse(
+            code(
+                """object-node {""",
+                """    "name": "Bubba",""",
+                """    "age": 23,""",
+                """    "cool": true,""",
+                """    "happy": boolean-node {"true"},""",
+                """    "job": null-node{},""",
+                """    "hobbies": array-node {""",
+                """        "fishing"""",
+                """    }""",
+                """}"""
+            )
+        )
+
+        val objectNode: ObjectNodeConstructorContext = tree.find()
+        assertThat(objectNode.properties).hasSize(6)
+        assertThat(objectNode.properties[2].r.text).isEqualTo("true")
+        assertThat(objectNode.properties[5].r.find<StringLiteralContext>().unquotedText()).isEqualTo("fishing")
+    }
+
+    @Test
+    fun `Should recognize 'decimal-separator' as a valid element in a path expression`() {
+        log("Should recognize 'decimal-separator' as a valid element in a path expression:")
+        val tree = parse(
+            code(
+                "let \$decimal-separator := \$component/decimal-separator/xs:int(.)",
+                "return \$decimal-separator"
+            )
+        )
+        val letVar: LetVarContext = tree.find()
+        assertThat(letVar.value.text).isEqualTo("\$component/decimal-separator/xs:int(.)")
+    }
+
+    @Test
+    fun `Should recognize 'array-node' when used with a sequence type`() {
+        log("Should recognize 'array-node' when used with a sequence type:")
+        trace()
+        val tree = parse(
+            code(
+                "let \$stuff := \$node/array-node('stuff')/text()",
+                "return \$stuff"
+            )
+        )
+        val array: ArrayNodeTestContext = tree.find()
+        assertThat(array.name.text).isEqualTo("'stuff'")
     }
 }

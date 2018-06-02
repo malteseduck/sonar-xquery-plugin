@@ -124,7 +124,7 @@ class DependencyMapper(mode: String = "global") : XQueryAstVisitor {
         // needs to add "local" variables to the stack.
             is FunctionBodyContext -> {
                 enterStack()
-                mapFunctionVariableDeclarations(node.getParent() as FunctionDeclContext)
+                mapFunctionVariableDeclarations(node.getParent())
             }
             is FlworExprContext -> enterStack()
 
@@ -307,17 +307,36 @@ class DependencyMapper(mode: String = "global") : XQueryAstVisitor {
      * @param node
      * A function call node
      */
-    fun mapFunctionVariableDeclarations(node: FunctionDeclContext) {
-        val parameters = node.params
-        parameters?.forEach { parameter ->
-            val pName = parameter.name?.text
-            val pType = parameter.typeText()
+    fun mapFunctionVariableDeclarations(node: ParserRuleContext) {
+        when(node) {
+            is FunctionDeclContext -> {
+                val parameters = node.params
+                parameters?.forEach { parameter ->
+                    val pName = parameter.name?.text
+                    val pType = parameter.typeText()
 
-            pName?.let {
-                val param = Declaration(pName, null)
-                param.type = pType
-                param.line = parameter.getStart().line
-                addDeclaration(param)
+                    pName?.let {
+                        val param = Declaration(pName, null)
+                        param.type = pType
+                        param.line = parameter.getStart().line
+                        addDeclaration(param)
+                    }
+                }
+
+            }
+            is InlineFunctionExprContext -> {
+                val parameters = node.params
+                parameters?.forEach { parameter ->
+                    val pName = parameter.name?.text
+                    val pType = parameter.typeText()
+
+                    pName?.let {
+                        val param = Declaration(pName, null)
+                        param.type = pType
+                        param.line = parameter.getStart().line
+                        addDeclaration(param)
+                    }
+                }
             }
         }
     }

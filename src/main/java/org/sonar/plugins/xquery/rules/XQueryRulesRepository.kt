@@ -21,6 +21,7 @@ class XQueryRulesRepository(private val annotationRuleParser: AnnotationRulePars
     }
 
     override fun createRules(): List<Rule> {
+
         return annotationRuleParser.parse(CheckClasses.REPOSITORY_KEY, CheckClasses.checks)
     }
 

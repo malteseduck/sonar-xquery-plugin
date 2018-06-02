@@ -1,0 +1,9 @@
+{
+  "title": "XQuery Version",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "tags": [],
+  "defaultSeverity": "MINOR",
+  "ruleSpecification": null,
+  "sqKey": "XQueryVersion"
+}

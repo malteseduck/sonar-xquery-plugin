@@ -1,0 +1,9 @@
+{
+  "title": "Use Strong Typing in Function Declarations",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "tags": [],
+  "defaultSeverity": "CRITICAL",
+  "ruleSpecification": null,
+  "sqKey": "StrongTypingInFunctionDeclaration"
+}

@@ -1,0 +1,9 @@
+{
+  "title": "Log Function Usage (Marklogic)",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "tags": [],
+  "defaultSeverity": "MINOR",
+  "ruleSpecification": null,
+  "sqKey": "Log"
+}

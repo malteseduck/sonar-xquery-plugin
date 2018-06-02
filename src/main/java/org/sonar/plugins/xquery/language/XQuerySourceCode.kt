@@ -8,16 +8,13 @@
 
 package org.sonar.plugins.xquery.language
 
-import org.apache.commons.io.FileUtils
-import org.apache.commons.lang.StringUtils
 import org.sonar.api.design.Dependency
 import org.sonar.api.measures.Measure
 import org.sonar.api.measures.Metric
-import org.sonar.api.utils.SonarException
 import org.sonar.squid.api.SourceCodeEdgeUsage
 import java.io.File
-import java.io.IOException
 import java.io.Serializable
+import java.nio.file.Files
 import java.util.*
 
 class XQuerySourceCode : SourceCode {
@@ -30,19 +27,19 @@ class XQuerySourceCode : SourceCode {
     override val issues = ArrayList<Issue>()
 
     override val codeString: String
-        get() = StringUtils.join(code, "\n")
+        get() = code.joinToString("\n")
 
     /**
      * Creates a source code object using the string code.
      *
      * @param code a string of source code
      */
-    constructor(code: String) : this(Arrays.asList<String>(*StringUtils.split(code, '\n')))
+    constructor(code: String) : this(code.split('\n'))
 
     constructor(resource: org.sonar.api.resources.File, code: List<String>, inputFile: File?) {
         this.inputFile = inputFile
         this.code = if (inputFile != null) {
-            FileUtils.readLines(inputFile, "UTF-8")
+            Files.readAllLines(inputFile.toPath())
         } else {
             code
         }
@@ -56,7 +53,7 @@ class XQuerySourceCode : SourceCode {
      *
      * @param code a list of strings code lines
      */
-    constructor(code: List<String>) : this(org.sonar.api.resources.File.create("'" + StringUtils.join(code, "\n") + "'\n"), code, null)
+    constructor(code: List<String>) : this(org.sonar.api.resources.File.create("'" + code.joinToString("\n") + "'\n"), code, null)
 
     constructor(resource: org.sonar.api.resources.File, inputFile: File): this(resource, listOf(), inputFile)
 

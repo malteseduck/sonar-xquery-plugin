@@ -5,6 +5,7 @@
 package org.sonar.plugins.xquery.parser
 
 import org.antlr.v4.runtime.*
+import org.sonar.plugins.xquery.parser.XQueryParser.DirElemContentContext
 import org.sonar.plugins.xquery.parser.XQueryParser.ModuleContext
 
 import java.io.IOException
@@ -46,13 +47,7 @@ object GenerateAST {
     fun main(args: Array<String>) {
         try {
             val source = code(
-                """<div>""",
-                """    {(: ABC-1234 <span class="date">{ ${"$"}progress }%</span>:)}""",
-                """    <h4 class="truncate">""",
-                """        <a href="{${"$"}link}" title="{${"$"}set}">{${"$"}set}</a>""",
-                """    </h4>""",
-                """    <p class="truncate">{${"$"}name}</p>""",
-                """</div>"""
+                """map:entry("id", '{{ quicklinks.id }}')"""
             )
 
             val lexer = XQueryLexer(CharStreams.fromString(source))

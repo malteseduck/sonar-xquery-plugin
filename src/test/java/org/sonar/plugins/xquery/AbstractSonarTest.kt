@@ -271,6 +271,7 @@ open class AbstractSonarTest {
      */
     fun trace(enable: Boolean = true) {
         if (enable) {
+            reporter = ProblemReporter(false)
             isTracing = true
             val handler = ConsoleHandler()
             handler.formatter = TestLogFormatter()
@@ -278,6 +279,7 @@ open class AbstractSonarTest {
             logger.addHandler(handler)
             logger.level = Level.ALL
         } else {
+            reporter = null
             isTracing = false
             for (handler in logger.handlers) {
                 logger.removeHandler(handler)

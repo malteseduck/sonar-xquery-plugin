@@ -5,7 +5,6 @@
 package org.sonar.plugins.xquery.checks
 
 import org.antlr.v4.runtime.ParserRuleContext
-import org.antlr.v4.runtime.tree.ParseTree
 import org.antlr.v4.runtime.tree.TerminalNode
 import org.sonar.api.rule.RuleKey
 import org.sonar.plugins.xquery.parser.getLine

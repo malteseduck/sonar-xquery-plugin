@@ -5,7 +5,6 @@
 package org.sonar.plugins.xquery.checks
 
 import org.antlr.v4.runtime.ParserRuleContext
-import org.apache.commons.lang.StringUtils
 import org.sonar.plugins.xquery.parser.XQueryParser.FunctionCallContext
 import org.sonar.plugins.xquery.parser.XQueryParser.ModuleImportContext
 import org.sonar.plugins.xquery.parser.getLine
@@ -26,10 +25,10 @@ abstract class AbstractProhibitFunctionCheck : AbstractCheck() {
                 imports[prefix] = namespace
             }
             is FunctionCallContext -> {
-                val function = node.functionName().text
+                val function: String? = node.functionName()?.text
 
                 // Do not process if for some reason the function name is not there
-                if (StringUtils.isNotBlank(function)) {
+                if (function?.isNotBlank() == true) {
                     val parts = function.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
                     // If there is a prefix then set it, otherwise just set the function name

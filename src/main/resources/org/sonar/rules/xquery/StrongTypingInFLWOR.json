@@ -1,0 +1,9 @@
+{
+  "title": "Use Strong Typing FLWOR Expressions",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "tags": [],
+  "defaultSeverity": "MINOR",
+  "ruleSpecification": null,
+  "sqKey": "StrongTypingInFLWOR"
+}

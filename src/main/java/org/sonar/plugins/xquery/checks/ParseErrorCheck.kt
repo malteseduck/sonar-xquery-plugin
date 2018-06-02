@@ -6,12 +6,12 @@ package org.sonar.plugins.xquery.checks
 
 import org.apache.commons.lang.StringUtils
 import org.sonar.api.rule.RuleKey
-import org.sonar.check.Priority
 import org.sonar.check.Rule
+import org.sonar.plugins.xquery.checks.ParseErrorCheck.Companion.RULE_KEY
 import org.sonar.plugins.xquery.parser.reporter.ProblemReporter
 import org.sonar.plugins.xquery.rules.CheckClasses
 
-@Rule(key = ParseErrorCheck.RULE_KEY, name = "Code Parsing Error", description = "This is to catch parsing errors on projects. " + "There may be a potential syntax error, or the parser just may not be able to process certain syntax.", priority = Priority.INFO)
+@Rule(key = RULE_KEY)
 class ParseErrorCheck : AbstractCheck() {
 
     override fun checkReport(reporter: ProblemReporter) {

@@ -1,0 +1,9 @@
+{
+  "title": "Avoid Using '//' in XPath",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "tags": [],
+  "defaultSeverity": "MINOR",
+  "ruleSpecification": null,
+  "sqKey": "XPathDescendantSteps"
+}

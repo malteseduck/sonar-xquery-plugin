@@ -18,7 +18,7 @@ open class Declaration(name: String, var namespace: String?) {
     var name: String = name
         set(name) {
             field = if (name.contains(":")) {
-                StringUtils.substringAfter(name, ":")
+                name.substringAfter(':')
             } else name
         }
 
@@ -31,10 +31,10 @@ open class Declaration(name: String, var namespace: String?) {
 
     override fun hashCode(): Int {
         var hash = 0
-        if (StringUtils.isNotBlank(this.name)) {
+        if (this.name.isNotBlank()) {
             hash += this.name.hashCode()
         }
-        if (StringUtils.isNotBlank(namespace)) {
+        if (!namespace.isNullOrBlank()) {
             hash += namespace!!.hashCode()
         }
         return hash
@@ -42,11 +42,11 @@ open class Declaration(name: String, var namespace: String?) {
 
     override fun toString(): String {
         val buffer = StringBuffer("Declaration [")
-        if (StringUtils.isNotBlank(namespace)) {
+        if (!namespace.isNullOrBlank()) {
             buffer.append(namespace).append(":")
         }
         buffer.append(this.name)
-        if (StringUtils.isNotBlank(type)) {
+        if (!type.isNullOrBlank()) {
             buffer.append("=").append(type)
         }
         buffer.append(" (").append(line).append(")]")

@@ -8,9 +8,8 @@ import org.antlr.v4.runtime.ParserRuleContext
 import org.sonar.api.rule.RuleKey
 import org.sonar.check.Priority
 import org.sonar.check.Rule
-import org.sonar.plugins.xquery.parser.XQueryParser
+import org.sonar.plugins.xquery.checks.XPathTextStepsCheck.Companion.RULE_KEY
 import org.sonar.plugins.xquery.parser.XQueryParser.*
-import org.sonar.plugins.xquery.parser.find
 import org.sonar.plugins.xquery.parser.findInOrNull
 import org.sonar.plugins.xquery.parser.getLine
 import org.sonar.plugins.xquery.rules.CheckClasses
@@ -20,7 +19,7 @@ import org.sonar.plugins.xquery.rules.CheckClasses
  *
  * @since 1.0
  */
-@Rule(key = XPathTextStepsCheck.RULE_KEY, name = "Avoid Using text() in XPath", description = "Generally avoid using /text() in your XPath in favor of using fn:string() or allowing atomization " + "(through strong typing or default atomization).", priority = Priority.MINOR)
+@Rule(key = RULE_KEY)
 class XPathTextStepsCheck : AbstractPathCheck() {
 
     override fun enterExpression(node: ParserRuleContext) {
@@ -36,7 +35,7 @@ class XPathTextStepsCheck : AbstractPathCheck() {
     }
 
     companion object {
-        const val RULE_KEY = "XpathTextSteps"
+        const val RULE_KEY = "XPathTextSteps"
         private val RULE = RuleKey.of(CheckClasses.REPOSITORY_KEY, RULE_KEY)
     }
 }
