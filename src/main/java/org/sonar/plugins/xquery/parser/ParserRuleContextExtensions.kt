@@ -14,29 +14,39 @@ inline fun <reified T : ParserRuleContext> ParserRuleContext.findText(): String 
     find<T>().text
 
 inline fun <reified T : ParserRuleContext> ParserRuleContext.findTextIn(vararg ctx: KClass<*>): String =
-    findIn<T>(*ctx, T::class).text
+    findIn<T>(ctx = *arrayOf(*ctx, T::class)).text
 
-inline fun <reified T : ParserRuleContext> ParserRuleContext.find(): T =
-    findOrNull()
+inline fun <reified T : ParserRuleContext> ParserRuleContext.exists(skip: Boolean = true): Boolean =
+    find(root = this, skip = skip, ctx = *arrayOf(T::class)) as T? != null
+
+inline fun <reified T : ParserRuleContext> ParserRuleContext.find(skip: Boolean = true): T =
+    findOrNull(skip)
         ?: throw Failures.instance().failure("${T::class.simpleName} not found")
 
-inline fun <reified T : ParserRuleContext> ParserRuleContext.findOrNull(): T? =
-    find(this, T::class)
+inline fun <reified T : ParserRuleContext> ParserRuleContext.findOrNull(skip: Boolean = true): T? =
+    find(root = this, skip = skip, ctx = *arrayOf(T::class))
 
 inline fun <reified T : ParserRuleContext> ParserRuleContext.findIn(vararg ctx: KClass<*>): T =
-    findInOrNull(*ctx)
+    findIn(skip = true, ctx = *ctx)
+
+inline fun <reified T : ParserRuleContext> ParserRuleContext.findIn(skip: Boolean = true, vararg ctx: KClass<*>): T =
+    findInOrNull(skip = skip, ctx = *ctx)
         ?: throw Failures.instance().failure("${ctx.joinToString { it.simpleName ?: it.toString() }} not found")
 
 inline fun <reified T : ParserRuleContext> ParserRuleContext.findInOrNull(vararg ctx: KClass<*>): T? =
-    find(this, *ctx, T::class)
+    findInOrNull(skip = true, ctx = *ctx)
 
-fun <T : ParserRuleContext> ParserRuleContext.find(root: ParserRuleContext?, vararg ctx: KClass<*>): T? {
+inline fun <reified T : ParserRuleContext> ParserRuleContext.findInOrNull(skip: Boolean = true, vararg ctx: KClass<*>): T? =
+    find(root = this, skip = skip, ctx = *arrayOf(*ctx, T::class))
+
+fun <T : ParserRuleContext> ParserRuleContext.find(root: ParserRuleContext?, skip: Boolean = true, vararg ctx: KClass<*>): T? {
     if (root == null) return null
 
     return when {
         ctx.size == 1 && ctx[0] == root::class -> root as T
         ctx[0] == root::class -> findChildren(root, *ctx.drop(1).toTypedArray())
-        else -> findChildren(root, *ctx)
+        skip -> findChildren(root, *ctx)
+        else -> null
     }
 }
 
@@ -44,7 +54,7 @@ fun <T : ParserRuleContext> ParserRuleContext.findChildren(node: ParserRuleConte
     ?.asSequence()
     ?.filter { it is ParserRuleContext }
     ?.mapNotNull {
-        find<T>(it as ParserRuleContext, *ctx)
+        find<T>(root = it as ParserRuleContext, ctx = *ctx)
     }?.firstOrNull()
 
 fun ParserRuleContext.asStringTree(): String = this.toStringTree(XQueryParser.ruleNames.toList())
